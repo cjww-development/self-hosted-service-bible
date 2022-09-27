@@ -1,0 +1,131 @@
+version: '3.7'
+
+volumes:
+  prowlarr:
+    name: prowlarr
+  sonarr:
+    name: sonarr
+  radarr:
+    name: radarr
+  transmission:
+    name: transmission
+
+services:
+  expressvpn:
+    image: polkaned/expressvpn
+    container_name: expressvpn
+    environment:
+        - ACTIVATION_CODE=${EXPRESS_VPN_ACTIVATION_CODE}
+    cap_add:
+        - NET_ADMIN
+    devices:
+        - /dev/net/tun
+    privileged: true
+    tty: true
+    ports:
+        # QBT UI Port
+        - 8090:8090
+        # Bittorrent port
+        - 6881:6881
+        - 6881:6881/udp
+        # Web port
+        - 8086:8080
+        - 9117:9117
+        # Sonarr port
+        - 8989:8989
+        # Radarr port
+        - 7878:7878
+        # Lidarr port
+        - 8686:8686
+        # Prowlarr port
+        - 9696:9696
+        # Transmission
+        - 9092:9091
+        - 51413:51413
+        - 51413:51413/udp
+    command: /bin/bash
+    restart: unless-stopped
+
+  transmission:
+    image: lscr.io/linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=997
+      - PGID=997
+      - TZ=Europe/London
+      - TRANSMISSION_WEB_HOME=/combustion-release/
+      - USER=username
+      - PASS=password
+    volumes:
+      - transmission:/config
+      - ${DOWNLOAD_ROOT_PATH}:/downloads
+    # Route egress traffic through VPN container
+    network_mode: service:expressvpn
+    restart: always
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    environment:
+      - PUID=997
+      - PGID=997
+      - TZ=Europe/London
+    volumes:
+      - prowlarr:/config
+    # Route egress traffic through VPN container
+    network_mode: service:expressvpn
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=997
+      - PGID=997
+      - TZ=Europe/London
+    volumes:
+      - sonarr:/config
+      - ${MEDIA_ROOT_PATH}/tv/automated:/tv/automated
+      - ${MEDIA_ROOT_PATH}/tv/existing:/tv/existing #optional
+      - ${DOWNLOAD_ROOT_PATH}:/downloads #optional
+    # Route egress traffic through VPN container
+    network_mode: service:expressvpn
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=997
+      - PGID=997
+      - TZ=Europe/London
+    volumes:
+      - radarr:/config
+      - /media/fs/plex/movies:/movies
+      - ${DOWNLOAD_ROOT_PATH}:/downloads
+    # Route egress traffic through VPN container
+    network_mode: service:expressvpn
+    restart: unless-stopped
+
+  plex-media-server:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    environment:
+      - name=claim-ssj4WW4RGWdu_cdsGQC8
+    ports:
+      - 32400:32400/tcp
+      - 3005:3005/tcp
+      - 8324:8324/tcp
+      - 32469:32469/tcp
+      - 1900:1900/udp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+    environment:
+      - PUID=997
+      - PGID=997
+      - VERSION=docker
+    volumes:
+      - ${MEDIA_ROOT_PATH}/tv:/plex-media/tv
+      - ${MEDIA_ROOT_PATH}/movies:/plex-media/movies
