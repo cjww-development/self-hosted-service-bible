@@ -15,34 +15,34 @@ services:
     image: polkaned/expressvpn
     container_name: expressvpn
     environment:
-        - ACTIVATION_CODE=${EXPRESS_VPN_ACTIVATION_CODE}
+      - ACTIVATION_CODE=${EXPRESS_VPN_ACTIVATION_CODE}
     cap_add:
-        - NET_ADMIN
+      - NET_ADMIN
     devices:
-        - /dev/net/tun
+      - /dev/net/tun
     privileged: true
     tty: true
     ports:
-        # QBT UI Port
-        - 8090:8090
-        # Bittorrent port
-        - 6881:6881
-        - 6881:6881/udp
-        # Web port
-        - 8086:8080
-        - 9117:9117
-        # Sonarr port
-        - 8989:8989
-        # Radarr port
-        - 7878:7878
-        # Lidarr port
-        - 8686:8686
-        # Prowlarr port
-        - 9696:9696
-        # Transmission
-        - 9092:9091
-        - 51413:51413
-        - 51413:51413/udp
+      # QBT UI Port
+      - 8090:8090
+      # Bittorrent port
+      - 6881:6881
+      - 6881:6881/udp
+      # Web port
+      - 8086:8080
+      - 9117:9117
+      # Sonarr port
+      - 8989:8989
+      # Radarr port
+      - 7878:7878
+      # Lidarr port
+      - 8686:8686
+      # Prowlarr port
+      - 9696:9696
+      # Transmission
+      - 9092:9091
+      - 51413:51413
+      - 51413:51413/udp
     command: /bin/bash
     restart: unless-stopped
 
