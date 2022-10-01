@@ -1,4 +1,4 @@
-version: '37'
+version: '3.7'
 
 volumes:
   prometheus_conf:
@@ -59,6 +59,7 @@ services:
     volumes:
       - prometheus_conf:/etc/prometheus
       - prometheus_data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - monitoring_net
     restart: always
