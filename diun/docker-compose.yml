@@ -1,0 +1,31 @@
+version: '3.7'
+
+volumes:
+  diun_data:
+    name: diun_data
+
+networks:
+  diun_net:
+    name: diun_net
+
+services:
+  diun:
+    image: crazymax/diun:$DIUN_TAG
+    container_name: diun.diun-net.cjww.dev
+    hostname: diun.diun-net.cjww.dev
+    environment:
+      - TZ=$TZ
+      - LOG_LEVEL=$LOG_LEVEL
+      - LOG_JSON=$LOG_JSON
+      - DIUN_WATCH_WORKERS=$DIUN_WATCH_WORKERS
+      - DIUN_WATCH_SCHEDULE=$DIUN_WATCH_SCHEDULE
+      - DIUN_PROVIDERS_DOCKER=$DIUN_PROVIDERS_DOCKER
+      - DIUN_NOTIF_SLACK_WEBHOOKURL=$DIUN_NOTIF_SLACK_WEBHOOKURL
+    volumes:
+      - diun_data:/data
+      - $DOCKER_SOCKET:/var/run/docker.sock
+    networks:
+      - diun_net
+    labels:
+      - "diun.enable=true"
+    restart: always

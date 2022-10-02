@@ -13,7 +13,8 @@ networks:
 services:
   pihole:
     image: pihole/pihole:$TAG
-    container_name: pihole
+    container_name: pihole.pihole-net.cjww.dev
+    hostname: pihole.pihole-net.cjww.dev
     environment:
       - TZ=$TZ
       - WEBPASSWORD=$WEBPASSWORD
@@ -32,4 +33,6 @@ services:
       - pi_hole_dnsmasq:/etc/dnsmasq.d
     networks:
       - pi_hole_net
+    labels:
+      - "diun.enable=true"
     restart: always
