@@ -44,6 +44,8 @@ services:
       - $INTERFACE_BIND:51413:51413
       - $INTERFACE_BIND:51413:51413/udp
     command: /bin/bash
+    labels:
+      - "diun.enable=true"
     restart: always
 
   transmission:
@@ -61,6 +63,8 @@ services:
       - $DOWNLOAD_PATH:/downloads
     # Route egress traffic through VPN container
     network_mode: service:expressvpn
+    labels:
+      - "diun.enable=true"
     restart: always
 
   prowlarr:
@@ -74,6 +78,8 @@ services:
       - prowlarr:/config
     # Route egress traffic through VPN container
     network_mode: service:expressvpn
+    labels:
+      - "diun.enable=true"
     restart: always
 
   sonarr:
@@ -90,6 +96,8 @@ services:
       - $DOWNLOAD_PATH:/downloads #optional
     # Route egress traffic through VPN container
     network_mode: service:expressvpn
+    labels:
+      - "diun.enable=true"
     restart: always
 
   radarr:
@@ -105,6 +113,8 @@ services:
       - $DOWNLOAD_PATH:/downloads
     # Route egress traffic through VPN container
     network_mode: service:expressvpn
+    labels:
+      - "diun.enable=true"
     restart: always
 
   plex-media-server:
@@ -128,4 +138,6 @@ services:
     volumes:
       - $MEDIA_PATH/tv:/plex-media/tv
       - $MEDIA_PATH/movies:/plex-media/movies
+    labels:
+      - "diun.enable=true"
     restart: always

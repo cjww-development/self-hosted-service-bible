@@ -24,6 +24,8 @@ services:
       - $INTERFACE_BIND:3000:3000
     networks:
       - monitoring_net
+    labels:
+      - "diun.enable=true"
     restart: always
 
   node_exporter:
@@ -42,6 +44,8 @@ services:
       - $ROOT_FS_PATH:/rootfs:ro
     networks:
       - monitoring_net
+    labels:
+      - "diun.enable=true"
     restart: always
 
   prometheus:
@@ -62,6 +66,8 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - monitoring_net
+    labels:
+      - "diun.enable=true"
     restart: always
 
   alertmanager:
@@ -74,5 +80,7 @@ services:
       - $INTERFACE_BIND:9093:9093
     networks:
       - monitoring_net
+    labels:
+      - "diun.enable=true"
     restart: always
     
