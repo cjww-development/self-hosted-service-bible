@@ -1,0 +1,29 @@
+version: '3.7'
+
+volumes:
+  portainer_data:
+    name: portainer_data
+
+networks:
+  portainer_net:
+    name: portainer_net
+
+services:
+  portainer:
+    image: portainer/portainer-ce:$TAG
+    container_name: portainer
+    hostname: $PORTAINER_HOST_NAME
+    security_opt:
+      - no-new-privileges:true
+    #TODO: env vars for authentications and e
+    ports:
+      - $INTERFACE_BIND:9000:9000
+    volumes:
+      - portainer_data:/data
+      - $DOCKER_SOCKET:/var/run/docker.sock
+      - $LOCALTIME_PATH:/etc/localtime:ro
+    networks:
+      - portainer_net
+    labels:
+      - "diun.enable=true"
+    restart: always
