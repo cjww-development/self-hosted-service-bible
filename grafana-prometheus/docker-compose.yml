@@ -16,6 +16,7 @@ services:
   grafana:
     image: grafana/grafana:$GRAFANA_TAG
     container_name: grafana
+    hostname: $GRAFANA_HOST_NAME
     environment:
       - GF_SECURITY_ADMIN_USER=$GRAFANA_ADMIN_USER
       - GF_SECURITY_ADMIN_PASSWORD=$GRAFANA_ADMIN_PASSWORD
@@ -31,6 +32,7 @@ services:
   node_exporter:
     image: prom/node-exporter:$NODE_EXPORTER_TAG
     container_name: node-exporter
+    hostname: $NODE_EXPORTER_HOST_NAME
     command:
       - '--path.procfs=/host/proc'
       - '--path.rootfs=/rootfs'
@@ -51,6 +53,7 @@ services:
   prometheus:
     image: prom/prometheus:$PROMETHEUS_TAG
     container_name: prometheus
+    hostname: $PROMETHEUS_HOST_NAME
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -73,6 +76,7 @@ services:
   alertmanager:
     image: prom/alertmanager:$ALERT_MANAGER_TAG
     container_name: alertmanager
+    hostname: $ALERT_MANAGER_HOST_NAME
     # command:
     #   - '--config.file=/etc/alertmanager/config.yml'
     #   - '--storage.path=/alertmanager'

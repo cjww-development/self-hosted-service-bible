@@ -14,6 +14,7 @@ services:
   expressvpn:
     image: polkaned/expressvpn:$EXPRESS_VPN_TAG
     container_name: expressvpn
+    hostname: $EXPRESS_VPN_HOST_NAME
     environment:
       - ACTIVATION_CODE=$EXPRESS_VPN_ACTIVATION_CODE
     cap_add:
@@ -120,6 +121,7 @@ services:
   plex-media-server:
     image: lscr.io/linuxserver/plex:$PLEX_TAG
     container_name: plex
+    hostname: $PLEX_HOST_NAME
     ports:
       - $INTERFACE_BIND:32400:32400/tcp
       - $INTERFACE_BIND:3005:3005/tcp

@@ -13,8 +13,8 @@ networks:
 services:
   pihole:
     image: pihole/pihole:$TAG
-    container_name: pihole.pihole-net.cjww.dev
-    hostname: pihole.pihole-net.cjww.dev
+    container_name: pihole
+    hostname: $PIHOLE_HOST_NAME
     environment:
       - TZ=$TZ
       - WEBPASSWORD=$WEBPASSWORD
