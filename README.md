@@ -16,7 +16,6 @@ Services to "docker-compose"
 - Keycloak
 - Authelia
 - samba
-- 2FAuth
 - CUPS
 - Uptime kuma
 - Vaultwarden
