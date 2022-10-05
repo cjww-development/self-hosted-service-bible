@@ -1,0 +1,53 @@
+version: '3.7'
+
+volumes:
+  2fauth_data:
+    name: 2fauth_data
+
+networks:
+  2fauth_net:
+    name: 2fauth_net
+
+services:
+  2fauth:
+    image: 2fauth/2fauth:$TAG
+    container_name: $CONTAINER_NAME
+    hostname: $HOST_NAME
+    environment:
+      - APP_NAME=$APP_NAME
+      - APP_ENV=$APP_ENV
+      - APP_DEBUG=$APP_DEBUG
+      - SITE_OWNER=$SITE_OWNER
+      - APP_KEY=$APP_KEY
+      - APP_URL=$APP_URL
+      - IS_DEMO_APP=$IS_DEMO_APP
+      - LOG_CHANNEL=$LOG_CHANNEL
+      - LOG_LEVEL=$LOG_LEVEL
+      - DB_DATABASE=$DB_DATABASE
+      - CACHE_DRIVER=$CACHE_DRIVER
+      - SESSION_DRIVER=$SESSION_DRIVER
+      - AUTHENTICATION_GUARD=$AUTHENTICATION_GUARD
+      # Leave the following configuration vars as is.
+      # Unless you like to tinker and know what you're doing.
+      - BROADCAST_DRIVER=log
+      - QUEUE_DRIVER=sync
+      - SESSION_LIFETIME=120
+      - REDIS_HOST=127.0.0.1
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+      - PUSHER_APP_ID=
+      - PUSHER_APP_KEY=
+      - PUSHER_APP_SECRET=
+      - PUSHER_APP_CLUSTER=mt1
+      - MIX_PUSHER_APP_KEY=$PUSHER_APP_KEY
+      - MIX_PUSHER_APP_CLUSTER=$PUSHER_APP_CLUSTER
+      - MIX_ENV=local
+    ports:
+      - $INTERFACE_BIND:8000:8000
+    volumes:
+      - 2fauth_data:/2fauth
+    networks:
+      - 2fauth_net
+    labels:
+      - "diun.enable=true"
+    restart: always
