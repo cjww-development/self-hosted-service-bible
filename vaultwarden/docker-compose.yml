@@ -1,0 +1,40 @@
+version: '3.7'
+
+volumes:
+  vaultwarden_data:
+    name: vaultwarden_data
+
+networks:
+  vaultwarden_net:
+    name: vaultwarden_net
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:$VAULTWARDEN_TAG
+    container_name: $VAULTWARDEN_CONTAINER_NAME
+    hostname: $VAULTWARDEN_HOST_NAME
+    ports:
+      - $INTERFACE_BIND:8070:80
+    volumes:
+      - vaultwarden_data:/data/
+    networks:
+      - vaultwarden_net
+    labels:
+      - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
+    restart: always
+
+  vaultwarden_backup:
+    image: jareware/docker-volume-backup:$DVB_TAG
+    container_name: $DVB_CONTAINER_NAME
+    hostname: $DVB_HOST_NAME
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+    volumes:
+      - vaultwarden_data:/backup/vaultwarden_data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - "diun.enable=true"
+    restart: always
