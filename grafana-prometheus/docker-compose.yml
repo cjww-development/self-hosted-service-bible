@@ -7,6 +7,8 @@ volumes:
     name: prometheus_data
   alertmanager_conf:
     name: alertmanager_conf
+  grafana_conf:
+    name: grafana_conf
   
 networks:
   monitoring_net:
@@ -25,8 +27,11 @@ services:
       - $INTERFACE_BIND:3000:3000
     networks:
       - monitoring_net
+    volumes:
+      - grafana_conf:/var/lib/grafana
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   node_exporter:
@@ -48,6 +53,7 @@ services:
       - monitoring_net
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   prometheus:
@@ -71,6 +77,7 @@ services:
       - monitoring_net
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   alertmanager:
@@ -84,6 +91,26 @@ services:
       - $INTERFACE_BIND:9093:9093
     networks:
       - monitoring_net
+    labels:
+      - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
+    restart: always
+
+  grafana_prometheus_backup:
+    image: jareware/docker-volume-backup:$DVB_TAG
+    container_name: $DVB_CONTAINER_NAME
+    hostname: $DVB_HOST_NAME
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: grafana-prometheus.tar.gz
+    volumes:
+      - prometheus_conf:/backup/prometheus_conf
+      - prometheus_data:/backup/prometheus_data
+      - alertmanager_conf:/backup/alertmanager_conf
+      - grafana_conf:/backup/grafana_conf
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       - "diun.enable=true"
     restart: always
