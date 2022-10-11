@@ -6,7 +6,7 @@ Services to "docker-compose"
 - A calendar service
 - Jenkins
 - ELK
-- Grafana loki
+- Grafana loki - partial - no loki
 - Gitea
 - OpenVPN
 - Wireguard
@@ -18,9 +18,14 @@ Services to "docker-compose"
 - samba
 - CUPS
 - Uptime kuma
-- Vaultwarden
+- Vaultwarden - done
 - Heimdall
 - Homer
 - Photoprism
 - https://github.com/awesome-selfhosted/awesome-selfhosted#recipe-management
-- 
+- 2fAuth - done
+- diun - done
+- flame - done
+- plex stack - done
+- pi hole - done
+- portainer - done
