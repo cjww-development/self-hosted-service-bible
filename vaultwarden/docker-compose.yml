@@ -35,7 +35,7 @@ services:
       BACKUP_FILENAME: vaultwarden.tar.gz
     volumes:
       - vaultwarden_data:/backup/vaultwarden_data
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
     labels:
       - "diun.enable=true"
     restart: always

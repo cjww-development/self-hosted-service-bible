@@ -50,7 +50,7 @@ services:
     volumes:
       - pi_hole_conf:/backup/pi_hole_conf
       - pi_hole_dnsmasq:/backup/pi_hole_dnsmasq
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
     labels:
       - "diun.enable=true"
     restart: always

@@ -23,6 +23,7 @@ services:
       - flame_net
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   flame_backup:
@@ -36,8 +37,7 @@ services:
       BACKUP_FILENAME: flame.tar.gz
     volumes:
       - flame_data:/backup/flame_data
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
     labels:
       - "diun.enable=true"
-      - "docker-volume-backup.stop-during-backup=true"
     restart: always

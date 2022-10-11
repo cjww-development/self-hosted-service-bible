@@ -66,6 +66,7 @@ services:
     network_mode: service:expressvpn
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   prowlarr:
@@ -81,6 +82,7 @@ services:
     network_mode: service:expressvpn
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   sonarr:
@@ -99,6 +101,7 @@ services:
     network_mode: service:expressvpn
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   radarr:
@@ -116,6 +119,7 @@ services:
     network_mode: service:expressvpn
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   plex-media-server:
@@ -140,6 +144,25 @@ services:
     volumes:
       - $MEDIA_PATH/tv:/plex-media/tv
       - $MEDIA_PATH/movies:/plex-media/movies
+    labels:
+      - "diun.enable=true"
+    restart: always
+
+  pihole_backup:
+    image: jareware/docker-volume-backup:$DVB_TAG
+    container_name: $DVB_CONTAINER_NAME
+    hostname: $DVB_HOST_NAME
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: pihole.tar.gz
+    volumes:
+      - transmission:/backup/transmission
+      - prowlarr:/backup/prowlarr
+      - sonarr:/backup/sonarr
+      - radarr:/backup/radarr
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
     labels:
       - "diun.enable=true"
     restart: always

@@ -50,6 +50,7 @@ services:
       - 2fauth_net
     labels:
       - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
   2fauth_backup:
@@ -63,8 +64,7 @@ services:
       BACKUP_FILENAME: 2fauth.tar.gz
     volumes:
       - 2fauth_data:/backup/2fauth_data
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
     labels:
       - "diun.enable=true"
-      - "docker-volume-backup.stop-during-backup=true"
     restart: always
