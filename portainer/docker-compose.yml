@@ -27,3 +27,20 @@ services:
     labels:
       - "diun.enable=true"
     restart: always
+
+  portainer_backup:
+    image: jareware/docker-volume-backup:$DVB_TAG
+    container_name: $DVB_CONTAINER_NAME
+    hostname: $DVB_HOST_NAME
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: portainer.tar.gz
+    volumes:
+      - portainer_data:/backup/portainer_data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
+    restart: always
