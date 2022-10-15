@@ -94,8 +94,7 @@ services:
       - TZ=$TZ
     volumes:
       - sonarr:/config
-      - $MEDIA_PATH/tv/automated:/tv/automated
-      - $MEDIA_PATH/tv/existing:/tv/existing #optional
+      - $MEDIA_PATH/tv:/tv
       - $DOWNLOAD_PATH:/downloads #optional
     # Route egress traffic through VPN container
     network_mode: service:expressvpn
