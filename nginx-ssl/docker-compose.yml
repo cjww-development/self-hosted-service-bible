@@ -7,12 +7,12 @@ networks:
   media_server_net:
     name: media_server_net
     external: true
-  2fauth_net:
-    name: 2fauth_net
-    external: true
-  flame_net:
-    name: flame_net
-    external: true
+  # 2fauth_net:
+  #   name: 2fauth_net
+  #   external: true
+  # flame_net:
+  #   name: flame_net
+  #   external: true
   monitoring_net:
     name: monitoring_net
     external: true
@@ -22,9 +22,9 @@ networks:
   portainer_net:
     name: portainer_net
     external: true
-  vaultwarden_net:
-    name: vaultwarden_net
-    external: true
+  # vaultwarden_net:
+  #   name: vaultwarden_net
+  #   external: true
 
 volumes:
   certbot_certs:
@@ -43,12 +43,12 @@ services:
     networks:
       - nginx_net
       - media_server_net
-      - 2fauth_net
-      - flame_net
+      # - 2fauth_net
+      # - flame_net
       - monitoring_net
       - pi_hole_net
       - portainer_net
-      - vaultwarden_net
+      # - vaultwarden_net
     labels:
       - "diun.enable=true"
     restart: always
