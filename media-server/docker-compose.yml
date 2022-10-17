@@ -131,16 +131,16 @@ services:
     image: lscr.io/linuxserver/plex:$PLEX_TAG
     container_name: plex
     hostname: $PLEX_HOST_NAME
-    ports:
-      - $INTERFACE_BIND:32400:32400/tcp
-      - $INTERFACE_BIND:3005:3005/tcp
-      - $INTERFACE_BIND:8324:8324/tcp
-      - $INTERFACE_BIND:32469:32469/tcp
-      - $INTERFACE_BIND:1900:1900/udp
-      - $INTERFACE_BIND:32410:32410/udp
-      - $INTERFACE_BIND:32412:32412/udp
-      - $INTERFACE_BIND:32413:32413/udp
-      - $INTERFACE_BIND:32414:32414/udp
+    # ports:
+    #   - $INTERFACE_BIND:32400:32400/tcp
+    #   - $INTERFACE_BIND:3005:3005/tcp
+    #   - $INTERFACE_BIND:8324:8324/tcp
+    #   - $INTERFACE_BIND:32469:32469/tcp
+    #   - $INTERFACE_BIND:1900:1900/udp
+    #   - $INTERFACE_BIND:32410:32410/udp
+    #   - $INTERFACE_BIND:32412:32412/udp
+    #   - $INTERFACE_BIND:32413:32413/udp
+    #   - $INTERFACE_BIND:32414:32414/udp
     environment:
       - PUID=$USER_ID
       - PGID=$GROUP_ID
@@ -149,8 +149,9 @@ services:
     volumes:
       - $MEDIA_PATH/tv:/plex-media/tv
       - $MEDIA_PATH/movies:/plex-media/movies
-    networks:
-      - media_server_net
+    # networks:
+    #   - media_server_net
+    network: host
     labels:
       - "diun.enable=true"
     restart: always
