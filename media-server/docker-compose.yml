@@ -10,6 +10,10 @@ volumes:
   transmission:
     name: transmission
 
+networks:
+  media_server_net:
+    name: media_server_net
+
 services:
   expressvpn:
     image: polkaned/expressvpn:$EXPRESS_VPN_TAG
@@ -45,6 +49,8 @@ services:
       - $INTERFACE_BIND:51413:51413
       - $INTERFACE_BIND:51413:51413/udp
     command: /bin/bash
+    networks:
+      - media_server_net
     labels:
       - "diun.enable=true"
     restart: always
@@ -143,6 +149,8 @@ services:
     volumes:
       - $MEDIA_PATH/tv:/plex-media/tv
       - $MEDIA_PATH/movies:/plex-media/movies
+    networks:
+      - media_server_net
     labels:
       - "diun.enable=true"
     restart: always
