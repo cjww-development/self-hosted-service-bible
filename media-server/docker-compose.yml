@@ -131,10 +131,8 @@ services:
     image: lscr.io/linuxserver/plex:$PLEX_TAG
     container_name: plex
     hostname: $PLEX_HOST_NAME
-    expose:
-      - 32400
     ports:
-      # - $INTERFACE_BIND:32400:32400/tcp
+      - $INTERFACE_BIND:32400:32400/tcp
       - 3005:3005/tcp
       - 8324:8324/tcp
       - 32469:32469/tcp
