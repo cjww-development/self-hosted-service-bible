@@ -45,7 +45,7 @@ services:
       # Prowlarr port
       - $INTERFACE_BIND:9696:9696
       # Transmission
-      - $INTERFACE_BIND:9092:9091
+      - $INTERFACE_BIND:9091:9091
       - $INTERFACE_BIND:51413:51413
       - $INTERFACE_BIND:51413:51413/udp
     command: /bin/bash
