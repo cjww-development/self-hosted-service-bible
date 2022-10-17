@@ -44,7 +44,7 @@ services:
       - nginx_net
       - media_server_net
       # - 2fauth_net
-      # - flame_net
+      - flame_net
       - monitoring_net
       - pi_hole_net
       - portainer_net
