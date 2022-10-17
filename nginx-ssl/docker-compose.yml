@@ -1,0 +1,50 @@
+version: '3.7'
+
+networks:
+  nginx_net:
+    name: nginx_net
+
+volumes:
+  certbot_certs:
+    name: certbot_certs
+
+services:
+  nginx:
+    image: nginx:$NGINX_TAG
+    container_name: $NGINX_CONTAINER_NAME
+    hostname: $NGINX_HOST_NAME
+    ports:
+      - $HTTP_INTERFACE_BIND:443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - certbot_certs:/etc/nginx/ssl/:ro
+    networks:
+      - nginx_net
+    labels:
+      - "diun.enable=true"
+    restart: always
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: $CERTBOT_CONTAINER_NAME
+    hostname: $CERTBOT_HOST_NAME
+    volumes:
+      - certbot_certs:/etc/letsencrypt/:rw
+    labels:
+      - "diun.enable=true"
+
+  nginx_ssl_backup:
+    image: jareware/docker-volume-backup:$DVB_TAG
+    container_name: $DVB_CONTAINER_NAME
+    hostname: $DVB_HOST_NAME
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: nginx-ssl.tar.gz
+    volumes:
+      - certbot_certs:/backup/certbot_certs
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
+    labels:
+      - "diun.enable=true"
+    restart: always
