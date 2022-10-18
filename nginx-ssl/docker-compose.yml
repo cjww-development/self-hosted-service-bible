@@ -22,9 +22,9 @@ networks:
   portainer_net:
     name: portainer_net
     external: true
-  # vaultwarden_net:
-  #   name: vaultwarden_net
-  #   external: true
+  vaultwarden_net:
+    name: vaultwarden_net
+    external: true
 
 volumes:
   certbot_certs:
