@@ -48,7 +48,7 @@ services:
       - monitoring_net
       - pi_hole_net
       - portainer_net
-      # - vaultwarden_net
+      - vaultwarden_net
     labels:
       - "diun.enable=true"
     restart: always
