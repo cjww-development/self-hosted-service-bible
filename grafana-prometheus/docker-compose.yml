@@ -23,8 +23,8 @@ services:
       - GF_SECURITY_ADMIN_USER=$GRAFANA_ADMIN_USER
       - GF_SECURITY_ADMIN_PASSWORD=$GRAFANA_ADMIN_PASSWORD
       - GF_USERS_ALLOW_SIGN_UP=false
-    ports:
-      - $INTERFACE_BIND:3000:3000
+    expose:
+      - 3000
     networks:
       - monitoring_net
     volumes:
@@ -43,8 +43,8 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-    ports:
-      - $INTERFACE_BIND:9100:9100
+    expose:
+      - 9100
     volumes:
       - $PROC_PATH:/host/proc:ro
       - $SYS_PATH:/host/sys:ro
@@ -67,8 +67,8 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=${RETENTION_TIME}'
       - '--web.enable-lifecycle'
-    ports:
-      - $INTERFACE_BIND:9090:9090
+    expose:
+      - 9090
     volumes:
       - prometheus_conf:/etc/prometheus
       - prometheus_data:/prometheus
@@ -87,8 +87,8 @@ services:
     # command:
     #   - '--config.file=/etc/alertmanager/config.yml'
     #   - '--storage.path=/alertmanager'
-    ports:
-      - $INTERFACE_BIND:9093:9093
+    expose:
+      - 9093
     networks:
       - monitoring_net
     labels:
