@@ -42,8 +42,8 @@ services:
       - MIX_PUSHER_APP_KEY=$PUSHER_APP_KEY
       - MIX_PUSHER_APP_CLUSTER=$PUSHER_APP_CLUSTER
       - MIX_ENV=local
-    ports:
-      - $INTERFACE_BIND:8000:8000
+    expose:
+      - 8000
     volumes:
       - 2fauth_data:/2fauth
     networks:
