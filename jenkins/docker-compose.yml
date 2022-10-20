@@ -35,7 +35,7 @@ services:
     image: docker:dind
     container_name: dind
     host_name: dind.docker.cjww.dev
-    priviledged: true
+    privileged: true
     environment:
       - DOCKER_TLS_CERTDIR=/certs
     ports:
