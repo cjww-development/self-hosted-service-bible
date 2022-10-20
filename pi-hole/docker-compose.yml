@@ -5,9 +5,9 @@ volumes:
     name: pi_hole_conf
   pi_hole_dnsmasq:
     name: pi_hole_dnsmasq
-  certbot_certs:
-    name: certbot_certs
-    external: true
+  # certbot_certs:
+  #   name: certbot_certs
+  #   external: true
 
 networks:
   pi_hole_net:
@@ -37,9 +37,9 @@ services:
     volumes:
       - pi_hole_conf:/etc/pihole
       - pi_hole_dnsmasq:/etc/dnsmasq.d
-      - certbot_certs:/etc/nginx/ssl/:ro
-      - ./external.conf:/etc/lighttpd/external.conf:ro
-      - ./lighttpd.conf:/etc/lighttpd/lighttpd.conf:ro
+#      - certbot_certs:/etc/nginx/ssl/:ro
+#      - ./external.conf:/etc/lighttpd/external.conf:ro
+#      - ./lighttpd.conf:/etc/lighttpd/lighttpd.conf:ro
     networks:
       - pi_hole_net
     labels:
