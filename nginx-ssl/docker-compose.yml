@@ -7,9 +7,9 @@ networks:
   media_server_net:
     name: media_server_net
     external: true
-  # 2fauth_net:
-  #   name: 2fauth_net
-  #   external: true
+  2fauth_net:
+    name: 2fauth_net
+    external: true
   flame_net:
     name: flame_net
     external: true
@@ -43,7 +43,7 @@ services:
     networks:
       - nginx_net
       - media_server_net
-      # - 2fauth_net
+      - 2fauth_net
       - flame_net
       - monitoring_net
       - pi_hole_net
