@@ -15,8 +15,8 @@ services:
     hostname: $FLAME_HOST_NAME
     environment:
       - PASSWORD=$DASHBOARD_PASSWORD
-    ports:
-      - $HTTP_INTERFACE_BIND:5005:5005
+    expose:
+      - 5005
     volumes:
       - flame_data:/app/data
     networks:
