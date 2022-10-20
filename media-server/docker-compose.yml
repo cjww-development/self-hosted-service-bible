@@ -27,27 +27,38 @@ services:
       - /dev/net/tun
     privileged: true
     tty: true
-    ports:
-      # QBT UI Port
-      - $INTERFACE_BIND:8090:8090
-      # Bittorrent port
-      - $INTERFACE_BIND:6881:6881
-      - $INTERFACE_BIND:6881:6881/udp
-      # Web port
-      - $INTERFACE_BIND:8086:8080
-      - $INTERFACE_BIND:9117:9117
-      # Sonarr port
-      - $INTERFACE_BIND:8989:8989
-      # Radarr port
-      - $INTERFACE_BIND:7878:7878
-      # Lidarr port
-      - $INTERFACE_BIND:8686:8686
-      # Prowlarr port
-      - $INTERFACE_BIND:9696:9696
-      # Transmission
-      - $INTERFACE_BIND:9091:9091
-      - $INTERFACE_BIND:51413:51413
-      - $INTERFACE_BIND:51413:51413/udp
+    expose:
+      - 8090
+      - 6881
+      - 8080
+      - 9117
+      - 8989
+      - 7878
+      - 8686
+      - 9696
+      - 9091
+      - 51413
+    # ports:
+    #   # QBT UI Port
+    #   - $INTERFACE_BIND:8090:8090
+    #   # Bittorrent port
+    #   - $INTERFACE_BIND:6881:6881
+    #   - $INTERFACE_BIND:6881:6881/udp
+    #   # Web port
+    #   - $INTERFACE_BIND:8086:8080
+    #   - $INTERFACE_BIND:9117:9117
+    #   # Sonarr port
+    #   - $INTERFACE_BIND:8989:8989
+    #   # Radarr port
+    #   - $INTERFACE_BIND:7878:7878
+    #   # Lidarr port
+    #   - $INTERFACE_BIND:8686:8686
+    #   # Prowlarr port
+    #   - $INTERFACE_BIND:9696:9696
+    #   # Transmission
+    #   - $INTERFACE_BIND:9091:9091
+    #   - $INTERFACE_BIND:51413:51413
+    #   - $INTERFACE_BIND:51413:51413/udp
     command: /bin/bash
     networks:
       - media_server_net
