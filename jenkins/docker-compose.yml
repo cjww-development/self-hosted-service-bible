@@ -7,6 +7,8 @@ networks:
 volumes:
   jenkins_home:
     name: jenkins_home
+  jenkins_docker_certs:
+    name: jenkins_docker_certs
 
 services:
   jenkins:
@@ -27,6 +29,24 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+    restart: always
+
+  dind:
+    image: docker:dind
+    container_name: dind
+    host_name: dind.docker.cjww.dev
+    priviledged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    ports:
+      - 2376:2376
+    volumes:
+      - jenkins_docker_certs:/certs/client
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - jenkins_net
+    labels:
+      - "diun.enable=true"
     restart: always
 
   jenkins_backup:
