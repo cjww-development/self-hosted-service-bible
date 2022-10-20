@@ -25,6 +25,9 @@ networks:
   vaultwarden_net:
     name: vaultwarden_net
     external: true
+  jenkins_net:
+    name: jenkins_net
+    external: true
 
 volumes:
   certbot_certs:
@@ -49,6 +52,7 @@ services:
       - pi_hole_net
       - portainer_net
       - vaultwarden_net
+      - jenkins_net
     labels:
       - "diun.enable=true"
     restart: always

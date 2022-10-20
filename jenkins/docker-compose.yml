@@ -1,0 +1,46 @@
+version: '3.7'
+
+networks:
+  jenkins_net:
+    name: jenkins_net
+
+volumes:
+  jenkins_home:
+    name: jenkins_home
+
+services:
+  jenkins:
+    image: jenkins/jenkins:$JENKINS_TAG
+    container_name: jenkins
+    hostname: $JENKINS_HOST
+    privileged: true
+    environment:
+      - name=value
+    expose:
+      - 8080
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - $DOCKER_SOCKET:/var/run/docker.sock
+      - $DOCKER_BIN:/usr/bin/docker
+    networks:
+      - jenkins_net
+    labels:
+      - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
+    restart: always
+
+  jenkins_backup:
+    image: jareware/docker-volume-backup:$DVB_TAG
+    container_name: $DVB_CONTAINER_NAME
+    hostname: $DVB_HOST_NAME
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: jenkins.tar.gz
+    volumes:
+      - jenkins_home:/backup/jenkins_home
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
+    labels:
+      - "diun.enable=true"
+    restart: always
