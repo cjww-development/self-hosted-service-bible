@@ -38,6 +38,7 @@ services:
       - pi_hole_conf:/etc/pihole
       - pi_hole_dnsmasq:/etc/dnsmasq.d
       - certbot_certs:/etc/nginx/ssl/:ro
+      - ./external.conf:/etc/lighttpd/external.conf:ro
     networks:
       - pi_hole_net
     labels:
