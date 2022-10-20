@@ -15,9 +15,8 @@ services:
     hostname: $PORTAINER_HOST_NAME
     security_opt:
       - no-new-privileges:true
-    #TODO: env vars for authentications and e
-    ports:
-      - $INTERFACE_BIND:9000:9000
+    expose:
+      - 9000
     volumes:
       - portainer_data:/data
       - $DOCKER_SOCKET:/var/run/docker.sock
