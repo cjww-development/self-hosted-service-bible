@@ -1,0 +1,69 @@
+version: '3.7'
+
+volumes:
+  minecraft_data:
+    name: minecraft_data
+
+networks:
+  minecraft_net:
+    name: minecraft_net
+
+services:
+  minecraft:
+    image: itzg/minecraft-server:$MC_TAG
+    container_name: $MC_CONTAINER_NAME
+    hostname: $MC_HOST_NAME
+    environment:
+      - ALLOW_NETHER=$ALLOW_NETHER
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=$ANNOUNCE_PLAYER_ACHIEVEMENTS
+      - ENABLE_ROLLING_LOGS=$ENABLE_ROLLING_LOGS
+      - EULA=true
+      - DIFFICULTY=$DIFFICULTY
+      - ENABLE_AUTOPAUSE=$ENABLE_AUTOPAUSE
+      - FORCE_GAMEMODE=$FORCE_GAMEMODE
+      - GENERATE_STRUCTURES=$GENERATE_STRUCTURES
+      - LEVEL_TYPE=$LEVEL_TYPE
+      - MAX_BUILD_HEIGHT=$MAX_BUILD_HEIGHT
+      - MAX_PLAYERS=$MAX_PLAYERS
+      - MAX_WORLD_SIZE=$MAX_WORLD_SIZE
+      - MEMORY=$MEMORY
+      - MODE=$MODE
+      - MOTD=$MOTD
+      - OPS=$OPS
+      - OVERRIDE_SERVER_PROPERTIES=TRUE
+      - PVP=$PVP
+      - SEED=$SEED
+      - SPAWN_ANIMALS=$SPAWN_ANIMALS
+      - SPAWN_MONSTERS=$SPAWN_MONSTERS
+      - TYPE=$TYPE
+      - USE_AIKAR_FLAGS=$USE_AIKAR_FLAGS
+      # - USE_LARGE_PAGES=$USE_LARGE_PAGES
+      - VERSION=$VERSION
+      - VIEW_DISTANCE=$VIEW_DISTANCE
+      - WHITELIST=$WHITELIST
+    expose:
+     - 25565
+     - 25575
+    volumes:
+      - minecraft_data:/
+    labels:
+      - "diun.enable=true"
+    restart: always
+
+  minecraft_backup:
+    image: jareware/docker-volume-backup:$DVB_TAG
+    container_name: $DVB_CONTAINER_NAME
+    hostname: $DVB_HOST_NAME
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: minecraft.tar.gz
+    volumes:
+      - minecraft_data:/backup/minecraft_data
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
+    labels:
+      - "diun.enable=true"
+    restart: always
+    
+
