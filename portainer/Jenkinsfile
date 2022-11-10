@@ -14,6 +14,9 @@ pipeline {
 		DOCKER_SOCKET = "/var/run/docker.sock"
 		LOCALTIME_PATH = "/etc/localtime"
 		PORTAINER_HOST_NAME = credentials("portainer-host-name")
+		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
+		AWS_ACCESS_KEY_ID = credentials("docker-volume-backup-aws-access-key")
+		AWS_SECRET_ACCESS_KEY = credentials("docker-volume-backup-aws-secret-key")
 	}
   parameters {
 		booleanParam(
