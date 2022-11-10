@@ -22,11 +22,6 @@ pipeline {
 			description: 'Only deploy the service'
 		)
 		booleanParam(
-			name: 'Update',
-			defaultValue: false,
-			description: 'Only update and restart the service'
-		)
-		booleanParam(
 			name: 'Restart',
 			defaultValue: false,
 			description: 'Only restart the service'
@@ -36,7 +31,7 @@ pipeline {
 		stage("Pull Portainer images") {
 			when {
 				expression {
-					params.Deploy && params.Update
+					params.Deploy || params.Update
 				}
 			}
 			steps {
