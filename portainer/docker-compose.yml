@@ -28,7 +28,7 @@ services:
       - "docker-volume-backup.stop-during-backup=true"
     restart: always
 
-  vaultwarden_backup:
+  portainer_backup:
     image: jareware/docker-volume-backup:$DVB_VERSION
     container_name: portainer_backup
     environment:
