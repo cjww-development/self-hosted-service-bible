@@ -1,0 +1,87 @@
+pipeline {
+	agent {
+		docker {
+			image 'docker:latest'
+			args '-v /var/run/docker.sock:/var/run/docker.sock'
+		}
+	}
+	options {
+		ansiColor('xterm')
+	}
+	environment {
+		SERVICE = "portainer"
+		VERSION = "linux-amd64"
+		DOCKER_SOCKET = "/var/run/docker.sock"
+		LOCALTIME_PATH = "/etc/localtime"
+		PORTAINER_HOST_NAME = credentials("portainer-host-name")
+	}
+  parameters {
+		booleanParam(
+			name: 'Deploy',
+			defaultValue: false,
+			description: 'Only deploy the service'
+		)
+		booleanParam(
+			name: 'Update',
+			defaultValue: false,
+			description: 'Only update and restart the service'
+		)
+		booleanParam(
+			name: 'Restart',
+			defaultValue: false,
+			description: 'Only restart the service'
+		)
+	}
+	stages {
+		stage("Pull Portainer images") {
+			when {
+				expression {
+					params.Deploy && params.Update
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose pull
+          """
+				}
+			}
+		}
+		stage("Deploy Portainer") {
+			when {
+				expression {
+					params.Deploy
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose up -d
+          """
+				}
+			}
+		}
+		stage("Restart Portainer") {
+			when {
+				expression {
+					params.Restart
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose restart
+          """
+				}
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs()
+		}
+	}
+}
