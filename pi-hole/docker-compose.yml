@@ -40,8 +40,8 @@ services:
     restart: always
 
   pihole_backup:
-    image: jareware/docker-volume-backup:$DVB_TAG
-    container_name: $DVB_CONTAINER_NAME
+    image: jareware/docker-volume-backup:$DVB_VERSION
+    container_name: pihole_backup
     environment:
       AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
