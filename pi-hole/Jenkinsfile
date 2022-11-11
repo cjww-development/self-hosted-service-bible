@@ -19,6 +19,7 @@ pipeline {
     DNSSEC = true
     VIRTUAL_HOST = credentials("pihole-public-host-name")
     TEMPERATUREUNIT = "c"
+		DNSMASQ_LISTENING = "all"
     DNS_INTERFACE_BIND = "0.0.0.0"
     DNS_PORT = 53
 		DVB_VERSION = "2.6.0"
@@ -85,7 +86,7 @@ pipeline {
 				script {
 					sh """
 						cd $SERVICE
-						docker compose restart --remove-orphans
+						docker compose restart
           """
 				}
 			}

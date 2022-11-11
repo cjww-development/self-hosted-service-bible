@@ -23,6 +23,7 @@ services:
       - DNSSEC=$DNSSEC
       - VIRTUAL_HOST=$VIRTUAL_HOST
       - TEMPERATUREUNIT=$TEMPERATUREUNIT
+      - DNSMASQ_LISTENING=$DNSMASQ_LISTENING
     expose:
       - 80
       - 443
