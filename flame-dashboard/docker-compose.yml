@@ -27,7 +27,7 @@ services:
     restart: always
 
   flame_backup:
-    image: jareware/docker-volume-backup:$DVB_TAG
+    image: jareware/docker-volume-backup:$DVB_VERSION
     container_name: flame_backup
     environment:
       AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
