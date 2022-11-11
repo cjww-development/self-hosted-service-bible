@@ -5,9 +5,6 @@ volumes:
     name: pi_hole_conf
   pi_hole_dnsmasq:
     name: pi_hole_dnsmasq
-  # certbot_certs:
-  #   name: certbot_certs
-  #   external: true
 
 networks:
   pi_hole_net:
@@ -15,7 +12,7 @@ networks:
 
 services:
   pihole:
-    image: pihole/pihole:$TAG
+    image: pihole/pihole:$VERSION
     container_name: pihole
     hostname: $PIHOLE_HOST_NAME
     environment:
@@ -32,14 +29,9 @@ services:
     ports: 
       - $DNS_INTERFACE_BIND:$DNS_PORT:53/tcp
       - $DNS_INTERFACE_BIND:$DNS_PORT:53/udp
-      # - $HTTP_INTERFACE_BIND:$HTTP_PORT:80/tcp
-      # - $HTTP_INTERFACE_BIND:$HTTPS_PORT:443/tcp
     volumes:
       - pi_hole_conf:/etc/pihole
       - pi_hole_dnsmasq:/etc/dnsmasq.d
-#      - certbot_certs:/etc/nginx/ssl/:ro
-#      - ./external.conf:/etc/lighttpd/external.conf:ro
-#      - ./lighttpd.conf:/etc/lighttpd/lighttpd.conf:ro
     networks:
       - pi_hole_net
     labels:
@@ -50,7 +42,6 @@ services:
   pihole_backup:
     image: jareware/docker-volume-backup:$DVB_TAG
     container_name: $DVB_CONTAINER_NAME
-    hostname: $DVB_HOST_NAME
     environment:
       AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
