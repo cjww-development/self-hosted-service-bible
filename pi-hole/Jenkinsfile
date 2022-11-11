@@ -15,7 +15,7 @@ pipeline {
     TZ = "Europe/London"
     WEBPASSWORD = credentials("pihole-web-password")
     FTLCONF_LOCAL_IPV4 = "0.0.0.0"
-    PIHOLE_DNS = "1.1.1.1:1.0.0.1"
+    PIHOLE_DNS = "1.1.1.1;1.0.0.1"
     DNSSEC = true
     VIRTUAL_HOST = credentials("pihole-public-host-name")
     TEMPERATUREUNIT = "c"
