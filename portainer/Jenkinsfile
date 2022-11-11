@@ -77,7 +77,7 @@ pipeline {
 				script {
 					sh """
 						cd $SERVICE
-						docker compose restart
+						docker compose restart --remove-orphans
           """
 				}
 			}
