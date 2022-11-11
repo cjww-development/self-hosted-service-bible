@@ -46,7 +46,7 @@ pipeline {
 		)
 	}
 	stages {
-		stage("Pull Portainer images") {
+		stage("Pull Pi-hole images") {
 			when {
 				expression {
 					params.Deploy || params.Update
@@ -61,7 +61,7 @@ pipeline {
 				}
 			}
 		}
-		stage("Deploy Portainer") {
+		stage("Deploy Pi-hole") {
 			when {
 				expression {
 					params.Deploy
@@ -76,7 +76,7 @@ pipeline {
 				}
 			}
 		}
-		stage("Restart Portainer") {
+		stage("Restart Pi-hole") {
 			when {
 				expression {
 					params.Restart || params.Update

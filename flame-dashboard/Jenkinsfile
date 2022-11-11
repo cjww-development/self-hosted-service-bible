@@ -37,7 +37,7 @@ pipeline {
 		)
 	}
 	stages {
-		stage("Pull Portainer images") {
+		stage("Pull Flame images") {
 			when {
 				expression {
 					params.Deploy || params.Update
@@ -52,7 +52,7 @@ pipeline {
 				}
 			}
 		}
-		stage("Deploy Portainer") {
+		stage("Deploy Flame") {
 			when {
 				expression {
 					params.Deploy
@@ -67,7 +67,7 @@ pipeline {
 				}
 			}
 		}
-		stage("Restart Portainer") {
+		stage("Restart Flame") {
 			when {
 				expression {
 					params.Restart || params.Update
