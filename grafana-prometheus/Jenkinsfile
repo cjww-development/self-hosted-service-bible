@@ -73,6 +73,7 @@ pipeline {
 				script {
 					sh """
 						cd $SERVICE
+            ls -al
 						docker compose up -d --remove-orphans
           """
 				}
