@@ -11,8 +11,8 @@ networks:
 services:
   2fauth:
     image: 2fauth/2fauth:$VERSION
-    container_name: $CONTAINER_NAME
-    hostname: $HOST_NAME
+    container_name: 2fauth
+    hostname: $2FAUTH_HOST_NAME
     environment:
       - APP_NAME=$APP_NAME
       - APP_ENV=$APP_ENV
