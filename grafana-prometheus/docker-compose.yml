@@ -16,7 +16,7 @@ networks:
 
 services:
   grafana:
-    image: grafana/grafana:$GRAFANA_TAG
+    image: grafana/grafana:$GRAFANA_VERSION
     container_name: grafana
     hostname: $GRAFANA_HOST_NAME
     environment:
@@ -35,7 +35,7 @@ services:
     restart: always
 
   node_exporter:
-    image: prom/node-exporter:$NODE_EXPORTER_TAG
+    image: prom/node-exporter:$NODE_EXPORTER_VERSION
     container_name: node-exporter
     hostname: $NODE_EXPORTER_HOST_NAME
     command:
@@ -57,7 +57,7 @@ services:
     restart: always
 
   prometheus:
-    image: prom/prometheus:$PROMETHEUS_TAG
+    image: prom/prometheus:$PROMETHEUS_VERSION
     container_name: prometheus
     hostname: $PROMETHEUS_HOST_NAME
     command:
@@ -81,7 +81,7 @@ services:
     restart: always
 
   alertmanager:
-    image: prom/alertmanager:$ALERT_MANAGER_TAG
+    image: prom/alertmanager:$ALERT_MANAGER_VERSION
     container_name: alertmanager
     hostname: $ALERT_MANAGER_HOST_NAME
     # command:
@@ -97,9 +97,8 @@ services:
     restart: always
 
   grafana_prometheus_backup:
-    image: jareware/docker-volume-backup:$DVB_TAG
-    container_name: $DVB_CONTAINER_NAME
-    hostname: $DVB_HOST_NAME
+    image: jareware/docker-volume-backup:$DVB_VERSION
+    container_name: grafana_prometheus_backup
     environment:
       AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
