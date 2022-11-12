@@ -10,7 +10,7 @@ networks:
 
 services:
   diun:
-    image: crazymax/diun:$DIUN_TAG
+    image: crazymax/diun:$VERSION
     container_name: diun
     hostname: $DIUN_HOST_NAME
     environment:
