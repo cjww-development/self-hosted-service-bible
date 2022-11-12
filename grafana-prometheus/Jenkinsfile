@@ -9,7 +9,7 @@ pipeline {
 		ansiColor('xterm')
 	}
 	environment {
-    SERVICE = "grafan-prometheus"
+    SERVICE = "grafana-prometheus"
     GRAFANA_VERSION = "8.3.3"
     GRAFANA_HOST_NAME = credentials("grafana-host-name")
     GRAFANA_ADMIN_USER = "admin"
