@@ -2,7 +2,7 @@ pipeline {
 	agent {
 		docker {
 			image 'docker:latest'
-			args '-v /var/run/docker.sock:/var/run/docker.sock'
+			args '-v /var/run/docker.sock:/var/run/docker.sock -v /docker-container-config:/docker-container-config'
 		}
 	}
 	options {
@@ -59,6 +59,23 @@ pipeline {
 					sh """
 						cd $SERVICE
 						docker compose pull
+          """
+				}
+			}
+		}
+		stage("Deploy updated configuration") {
+			when {
+				expression {
+					params.Deploy
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+            mkdir -p /docker-container-config/prometheus
+						rm /docker-container-config/prometheus/prometheus.yml
+						cp prometheus.yml /docker-container-config/prometheus/prometheus.yml
           """
 				}
 			}
