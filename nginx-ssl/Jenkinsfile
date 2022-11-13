@@ -10,20 +10,10 @@ pipeline {
 	}
 	environment {
     SERVICE = "grafana-prometheus"
-    GRAFANA_VERSION = "8.3.3"
-    GRAFANA_HOST_NAME = credentials("grafana-host-name")
-    GRAFANA_ADMIN_USER = "admin"
-    GRAFANA_ADMIN_PASSWORD = credentials("grafana-admin-password")
-    NODE_EXPORTER_VERSION = "v1.4.0"
-    NODE_EXPORTER_HOST_NAME = credentials("node-exporter-host-name")
-    PROC_PATH = "/proc"
-    SYS_PATH = "/sys"
-    ROOT_FS_PATH = "/"
-    PROMETHEUS_VERSION = "v2.37.1"
-    PROMETHEUS_HOST_NAME = credentials("prometheus-host-name")
-    RETENTION_TIME = "120h"
-    ALERT_MANAGER_VERSION = "v0.24.0"
-    ALERT_MANAGER_HOST_NAME = credentials("alert-manager-host-name")
+    NGINX_VERSION = "1.23.1-alpine"
+    NGINX_CONF_REPO = credentials("nginx-config-repository")
+    HTTP_INTERFACE_BIND = "0.0.0.0"
+    CERTBOT_VERSION = "latest"
 		DVB_VERSION = "2.6.0"
 		DOCKER_SOCKET = "/var/run/docker.sock"
 		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
@@ -48,7 +38,7 @@ pipeline {
 		)
 	}
 	stages {
-		stage("Pull Grafana stack images") {
+		stage("Pull Nginx images") {
 			when {
 				expression {
 					params.Deploy || params.Update
@@ -71,15 +61,21 @@ pipeline {
 			}
 			steps {
 				script {
-					sh """
-						cd $SERVICE
-            mkdir -p /docker-container-config/prometheus
-						cp prometheus.yml /docker-container-config/prometheus/prometheus.yml
-          """
+          sshagent (credentials: ['cjww-dev-web-operations']) {
+						sh """
+              [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
+              ssh-keyscan -t rsa,dsa github.com >> ~/.ssh/known_hosts
+              cd $SERVICE
+              mkdir -p /docker-container-config/nginx
+              git clone $NGINX_CONF_REPO
+              cp $NGINX_CONF_REPO/nginx.conf /docker-container-config/nginx/nginx.conf
+              cp -rf $NGINX_CONF_REPO/servers /docker-container-config/nginx/servers
+						"""
+					}
 				}
 			}
 		}
-		stage("Deploy Grafana stack") {
+		stage("Deploy Nginx stack") {
 			when {
 				expression {
 					params.Deploy
@@ -94,7 +90,7 @@ pipeline {
 				}
 			}
 		}
-		stage("Restart Grafana stack") {
+		stage("Restart Nginx stack") {
 			when {
 				expression {
 					params.Restart || params.Update

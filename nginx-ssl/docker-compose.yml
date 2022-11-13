@@ -35,13 +35,13 @@ volumes:
 
 services:
   nginx:
-    image: nginx:$NGINX_TAG
-    container_name: $NGINX_CONTAINER_NAME
-    hostname: $NGINX_HOST_NAME
+    image: nginx:$NGINX_VERSION
+    container_name: nginx
     ports:
       - $HTTP_INTERFACE_BIND:443:443
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /docker-container-config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /docker-container-config/nginx/servers:/etc/nginx/servers:ro
       - certbot_certs:/etc/nginx/ssl/:ro
     networks:
       - nginx_net
@@ -58,18 +58,16 @@ services:
     restart: always
 
   certbot:
-    image: certbot/certbot:latest
-    container_name: $CERTBOT_CONTAINER_NAME
-    hostname: $CERTBOT_HOST_NAME
+    image: certbot/certbot:$CERTBOT_VERSION
+    container_name: certbot
     volumes:
       - certbot_certs:/etc/letsencrypt/:rw
     labels:
       - "diun.enable=true"
 
   nginx_ssl_backup:
-    image: jareware/docker-volume-backup:$DVB_TAG
-    container_name: $DVB_CONTAINER_NAME
-    hostname: $DVB_HOST_NAME
+    image: jareware/docker-volume-backup:$DVB_VERSION
+    container_name: nginx_ssl_backup
     environment:
       AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
