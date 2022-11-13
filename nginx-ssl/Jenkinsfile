@@ -67,9 +67,9 @@ pipeline {
               ssh-keyscan -t rsa,dsa github.com >> ~/.ssh/known_hosts
               cd $SERVICE
               mkdir -p /docker-container-config/nginx
-              git clone $NGINX_CONF_REPO
-              cp $NGINX_CONF_REPO/nginx.conf /docker-container-config/nginx/nginx.conf
-              cp -rf $NGINX_CONF_REPO/servers /docker-container-config/nginx/servers
+              git clone $NGINX_CONF_REPO nginx-conf
+              cp nginx-conf/nginx.conf /docker-container-config/nginx/nginx.conf
+              cp -rf nginx-conf/servers /docker-container-config/nginx/servers
 						"""
 					}
 				}
