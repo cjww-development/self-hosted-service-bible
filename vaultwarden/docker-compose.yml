@@ -10,8 +10,8 @@ networks:
 
 services:
   vaultwarden:
-    image: vaultwarden/server:$VAULTWARDEN_TAG
-    container_name: $VAULTWARDEN_CONTAINER_NAME
+    image: vaultwarden/server:$VERSION
+    container_name: vaultwarden
     hostname: $VAULTWARDEN_HOST_NAME
     expose:
       - 80
@@ -26,9 +26,8 @@ services:
     restart: always
 
   vaultwarden_backup:
-    image: jareware/docker-volume-backup:$DVB_TAG
-    container_name: $DVB_CONTAINER_NAME
-    hostname: $DVB_HOST_NAME
+    image: jareware/docker-volume-backup:$DVB_VERSION
+    container_name: vaultwarden_backup
     environment:
       AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
