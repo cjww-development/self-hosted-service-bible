@@ -10,8 +10,8 @@ networks:
 
 services:
   minecraft:
-    image: itzg/minecraft-server:$MC_TAG
-    container_name: $MC_CONTAINER_NAME
+    image: itzg/minecraft-server:$VERSION
+    container_name: minecraft
     hostname: $MC_HOST_NAME
     environment:
       - ALLOW_NETHER=$ALLOW_NETHER
@@ -37,7 +37,6 @@ services:
       - SPAWN_MONSTERS=$SPAWN_MONSTERS
       - TYPE=$TYPE
       - USE_AIKAR_FLAGS=$USE_AIKAR_FLAGS
-      # - USE_LARGE_PAGES=$USE_LARGE_PAGES
       - VERSION=$VERSION
       - VIEW_DISTANCE=$VIEW_DISTANCE
       - WHITELIST=$WHITELIST
@@ -51,9 +50,8 @@ services:
     restart: always
 
   minecraft_backup:
-    image: jareware/docker-volume-backup:$DVB_TAG
-    container_name: $DVB_CONTAINER_NAME
-    hostname: $DVB_HOST_NAME
+    image: jareware/docker-volume-backup:$DVB_VERSION
+    container_name: minecraft_backup
     environment:
       AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID

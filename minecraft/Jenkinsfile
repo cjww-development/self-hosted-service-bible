@@ -1,0 +1,116 @@
+pipeline {
+	agent {
+		docker {
+			image 'docker:latest'
+			args '-v /var/run/docker.sock:/var/run/docker.sock'
+		}
+	}
+	options {
+		ansiColor('xterm')
+	}
+	environment {
+    SERVICE = "minecraft"
+    VERSION = "java11"
+    MC_HOST_NAME = credentials("minecraft-host-name")
+    ALLOW_NETHER = true
+    ANNOUNCE_PLAYER_ACHIEVEMENTS = true
+    ENABLE_ROLLING_LOGS = true
+    EULA = true
+    DIFFICULTY = "normal"
+    ENABLE_AUTOPAUSE = true
+    FORCE_GAMEMODE = false
+    GENERATE_STRUCTURES = true
+    LEVEL_TYPE = "default"
+    MAX_BUILD_HEIGHT = 256
+    MAX_PLAYERS = 20
+    MAX_WORLD_SIZE = 29999984
+    MEMORY = "4G"
+    MODE = "survival"
+    MOTD = "Welcome to Summerfall"
+    OPS = credentials("minecraft-valid-usernames")
+    OVERRIDE_SERVER_PROPERTIES = true
+    PVP = true
+    SEED = "7322526427620945786"
+    SPAWN_ANIMALS = true
+    SPAWN_MONSTERS = true
+    TYPE = "FORGE"
+    USE_AIKAR_FLAGS = true
+    VERSION = "1.16.5"
+    VIEW_DISTANCE = 10
+    WHITELIST = credentials("minecraft-valid-usernames")
+		DVB_VERSION = "2.6.0"
+		DOCKER_SOCKET = "/var/run/docker.sock"
+		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
+		AWS_ACCESS_KEY_ID = credentials("docker-volume-backup-aws-access-key")
+		AWS_SECRET_ACCESS_KEY = credentials("docker-volume-backup-aws-secret-key")
+	}
+  parameters {
+		booleanParam(
+			name: 'Deploy',
+			defaultValue: false,
+			description: 'Only deploy the service'
+		)
+		booleanParam(
+			name: 'Update',
+			defaultValue: false,
+			description: 'Only update and restart the service'
+		)
+		booleanParam(
+			name: 'Restart',
+			defaultValue: false,
+			description: 'Only restart the service'
+		)
+	}
+	stages {
+		stage("Pull Minecraft images") {
+			when {
+				expression {
+					params.Deploy || params.Update
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose pull
+          """
+				}
+			}
+		}
+		stage("Deploy Minecraft") {
+			when {
+				expression {
+					params.Deploy
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose up -d --remove-orphans
+          """
+				}
+			}
+		}
+		stage("Restart Minecraft") {
+			when {
+				expression {
+					params.Restart || params.Update
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose restart
+          """
+				}
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs()
+		}
+	}
+}
