@@ -72,7 +72,7 @@ services:
     volumes:
       - prometheus_conf:/etc/prometheus
       - prometheus_data:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - /docker-container-config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - monitoring_net
     labels:
