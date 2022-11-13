@@ -1,0 +1,105 @@
+pipeline {
+	agent {
+		docker {
+			image 'docker:latest'
+			args '-v /var/run/docker.sock:/var/run/docker.sock'
+		}
+	}
+	options {
+		ansiColor('xterm')
+	}
+	environment {
+    SERVICE = "media-server"
+
+    EXPRESS_VPN_VERSION = "latest"
+    EXPRESS_VPN_HOST_NAME = credentials("express-vpn-host-name")
+    EXPRESS_VPN_ACTIVATION_CODE = credentials("express-vpn-activation-code")
+    TRANSMISSION_VERSION = "latest"
+    TRANSMISSION_USERNAME = credentials("transmission-username")
+    TRANSMISSION_PASSWORD = credentials("transmission-password")
+    PROWLARR_VERSION = "develop"
+    SONARR_VERSION = "latest"
+    RADARR_VERSION = "latest"
+    PLEX_VERSION = "latest"
+    PLEX_CLAIM = credentials("plex-claim")
+    USER_ID = "997"
+    GROUP_ID = "997"
+    TZ = "Europe/London"
+    DOWNLOAD_PATH = "/media-server/downloads"
+    MEDIA_PATH = "/media-server/plex"
+		DVB_VERSION = "2.6.0"
+		DOCKER_SOCKET = "/var/run/docker.sock"
+		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
+		AWS_ACCESS_KEY_ID = credentials("docker-volume-backup-aws-access-key")
+		AWS_SECRET_ACCESS_KEY = credentials("docker-volume-backup-aws-secret-key")
+	}
+  parameters {
+		booleanParam(
+			name: 'Deploy',
+			defaultValue: false,
+			description: 'Only deploy the service'
+		)
+		booleanParam(
+			name: 'Update',
+			defaultValue: false,
+			description: 'Only update and restart the service'
+		)
+		booleanParam(
+			name: 'Restart',
+			defaultValue: false,
+			description: 'Only restart the service'
+		)
+	}
+	stages {
+		stage("Pull Pi-hole images") {
+			when {
+				expression {
+					params.Deploy || params.Update
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose pull
+          """
+				}
+			}
+		}
+		stage("Deploy Pi-hole") {
+			when {
+				expression {
+					params.Deploy
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose up -d --remove-orphans
+          """
+				}
+			}
+		}
+		stage("Restart Pi-hole") {
+			when {
+				expression {
+					params.Restart || params.Update
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose restart
+          """
+				}
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs()
+		}
+	}
+}
