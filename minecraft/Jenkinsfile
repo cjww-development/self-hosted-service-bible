@@ -10,7 +10,7 @@ pipeline {
 	}
 	environment {
     SERVICE = "minecraft"
-    VERSION = "java11"
+    MC_VERSION = "java11"
     MC_HOST_NAME = credentials("minecraft-host-name")
     ALLOW_NETHER = true
     ANNOUNCE_PLAYER_ACHIEVEMENTS = true

@@ -10,7 +10,7 @@ networks:
 
 services:
   minecraft:
-    image: itzg/minecraft-server:$VERSION
+    image: itzg/minecraft-server:$MC_VERSION
     container_name: minecraft
     hostname: $MC_HOST_NAME
     environment:
