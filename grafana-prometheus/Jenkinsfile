@@ -74,7 +74,6 @@ pipeline {
 					sh """
 						cd $SERVICE
             mkdir -p /docker-container-config/prometheus
-						rm /docker-container-config/prometheus/prometheus.yml
 						cp prometheus.yml /docker-container-config/prometheus/prometheus.yml
           """
 				}
