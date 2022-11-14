@@ -34,7 +34,8 @@ services:
       - pi_hole_conf:/etc/pihole
       - pi_hole_dnsmasq:/etc/dnsmasq.d
     networks:
-      - pi_hole_net
+      pi_hole_net:
+        ipv4_address: 172.25.0.2
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
