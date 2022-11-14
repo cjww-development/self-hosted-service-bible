@@ -40,7 +40,7 @@ pipeline {
 		stage("Pull Portainer images") {
 			when {
 				expression {
-					params.Deploy || params.Update
+					params.Update
 				}
 			}
 			steps {
