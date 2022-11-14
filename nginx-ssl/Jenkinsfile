@@ -66,6 +66,7 @@ pipeline {
               apk add git
               git --version
               git clone $NGINX_CONF_REPO nginx-conf
+							rf -rf /docker-container-config/nginx/* || true
               cp nginx-conf/nginx.conf /docker-container-config/nginx/nginx.conf
               cp -rf nginx-conf/servers /docker-container-config/nginx/servers
 						"""
