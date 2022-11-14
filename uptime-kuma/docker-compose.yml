@@ -20,6 +20,7 @@ services:
       - 3001
     volumes:
       - uptime_kuma_data:/app/data
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
     networks:
       - uptime_kuma_net
       - pi_hole_net
