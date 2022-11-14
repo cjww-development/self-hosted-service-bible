@@ -7,6 +7,9 @@ volumes:
 networks:
   uptime_kuma_net:
     name: uptime_kuma_net
+  pi_hole_net:
+    external: true
+    name: pi_hole_net
 
 services:
   uptime_kuma:
@@ -19,6 +22,7 @@ services:
       - uptime_kuma_data:/app/data
     networks:
       - uptime_kuma_net
+      - pi_hole_net
     dns:
       - 172.25.0.2
     labels:
