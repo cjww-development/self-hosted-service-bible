@@ -16,7 +16,7 @@ services:
     expose:
       - 3001
     volumes:
-      - uptime-kuma:/app/data
+      - uptime_kuma:/app/data
     networks:
       - uptime_kuma_net
     labels:
