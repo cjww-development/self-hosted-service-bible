@@ -1,0 +1,41 @@
+version: '3.7'
+
+volumes:
+  uptime_kuma_data:
+    name: uptime_kuma_data
+
+networks:
+  uptime_kuma_net:
+    name: uptime_kuma_net
+
+services:
+  uptime_kuma:
+    image: louislam/uptime-kuma:$VERSION
+    container_name: uptime_kuma
+    hostname: $UPTIME_KUMA_HOST_NAME
+    expose:
+      - 3001
+    volumes:
+      - uptime-kuma:/app/data
+    networks:
+      - uptime_kuma_net
+    labels:
+      - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
+    restart: always
+
+  uptime_kuma_backup:
+    image: jareware/docker-volume-backup:$DVB_VERSION
+    container_name: uptime_kuma_backup
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: uptime-kuma.tar.gz
+    volumes:
+      - uptime_kuma_data:/backup/uptime_kuma_data
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
+    labels:
+      - "diun.enable=true"
+    restart: always
+    
