@@ -54,11 +54,6 @@ pipeline {
 			}
 		}
 		stage("Deploy updated configuration") {
-			when {
-				expression {
-					params.Deploy
-				}
-			}
 			steps {
 				script {
           sshagent (credentials: ['cjww-dev-web-operations']) {
