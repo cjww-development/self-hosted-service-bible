@@ -40,7 +40,7 @@ services:
       - pi_hole_dnsmasq:/etc/dnsmasq.d
     networks:
       pi_hole_net:
-        ipv4_address: 10.5.0.2
+        ipv4_address: 10.5.0.5
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
