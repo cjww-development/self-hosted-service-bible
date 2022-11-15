@@ -26,6 +26,8 @@ services:
       - pi_hole_net
     dns:
       - 172.25.0.2
+      - 1.1.1.1
+      - 1.0.0.1
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
