@@ -16,9 +16,9 @@ networks:
   monitoring_net:
     name: monitoring_net
     external: true
-  # pi_hole_net:
-  #   name: pi_hole_net
-  #   external: true
+  pi_hole_net:
+    name: pi_hole_net
+    external: true
   portainer_net:
     name: portainer_net
     external: true
@@ -52,7 +52,7 @@ services:
       - 2fauth_net
       - flame_net
       - monitoring_net
-      # - pi_hole_net
+      - pi_hole_net
       - portainer_net
       - vaultwarden_net
       - jenkins_net
