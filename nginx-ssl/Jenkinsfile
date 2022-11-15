@@ -61,12 +61,14 @@ pipeline {
               [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
               ssh-keyscan -t rsa,dsa github.com >> ~/.ssh/known_hosts
               cd $SERVICE
-              mkdir -p /docker-container-config/nginx
               apk update
               apk add git
-              git --version
-              git clone $NGINX_CONF_REPO nginx-conf
-							rf -rf /docker-container-config/nginx/* || true
+              
+							git clone $NGINX_CONF_REPO nginx-conf
+
+							rm -rf /docker-container-config/nginx/* || true
+							mkdir -p /docker-container-config/nginx
+							
               cp nginx-conf/nginx.conf /docker-container-config/nginx/nginx.conf
               cp -rf nginx-conf/servers /docker-container-config/nginx/servers
 						"""
