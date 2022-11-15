@@ -52,7 +52,7 @@ services:
       - 2fauth_net
       - flame_net
       - monitoring_net
-      - pi_hole_net
+      # - pi_hole_net
       - portainer_net
       - vaultwarden_net
       - jenkins_net
