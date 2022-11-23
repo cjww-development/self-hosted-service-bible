@@ -21,6 +21,8 @@ pipeline {
     DIUN_HOST_NAME = credentials("diun-host-name")
     DIUN_NOTIF_SLACK_WEBHOOKURL = credentials("diun-slack-webhook")
     DIUN_WATCH_FIRSTCHECKNOTIF = true
+		DIUN_NOTIF_WEBHOOK_ENDPOINT = credentials("diun-webhook")
+		DIUN_NOTIF_WEBHOOK_METHOD = "POST"
 	}
   parameters {
 		booleanParam(
