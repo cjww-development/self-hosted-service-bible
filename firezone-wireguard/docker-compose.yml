@@ -13,6 +13,9 @@ networks:
     ipam:
       config:
         - subnet: 172.25.0.0/16
+  pi_hole_net:
+    external: true
+    name: pi_hole_net
 
 services:
   firezone:
@@ -48,6 +51,11 @@ services:
     networks:
       firezone_net:
         ipv4_address: 172.25.0.100
+      pi_hole_net:
+    dns:
+      - 10.5.0.5
+      - 1.1.1.1
+      - 1.0.0.1
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
