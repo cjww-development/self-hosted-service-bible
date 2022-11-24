@@ -1,0 +1,91 @@
+version: '3.7'
+
+volumes:
+  firezone_data:
+    name: firezone_data
+  postgres_data:
+    name: postgres_data
+
+networks:
+  firezone_net:
+    name: firezone_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+services:
+  firezone:
+    image: firezone/firezone
+    container_name: firezone
+    hostname: $FIREZONE_HOST_NAME
+    environment:
+      - EXTERNAL_URL=$VPN_HOST_NAME
+      - ADMIN_EMAIL=$ADMIN_EMAIL
+      - DEFAULT_ADMIN_PASSWORD=$ADMIN_PASSWORD
+      - GUARDIAN_SECRET_KEY=$GUARDIAN_SECRET_KEY
+      - SECRET_KEY_BASE=$SECRET_KEY_BASE
+      - LIVE_VIEW_SIGNING_SALT=$LIVE_VIEW_SIGNING_SALT
+      - COOKIE_SIGNING_SALT=$COOKIE_SIGNING_SALT
+      - COOKIE_ENCRYPTION_SALT=$COOKIE_ENCRYPTION_SALT
+      - DATABASE_ENCRYPTION_KEY=$DATABASE_ENCRYPTION_KEY
+      - DATABASE_HOST=$POSTGRES_HOST_NAME
+      - DATABASE_NAME=$POSTGRES_DB
+      - DATABASE_USER=$POSTGRES_USER
+      - DATABASE_PASSWORD=$POSTGRES_PASSWORD
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
+    ports:
+      - 51820:51820/udp
+      - 13000:13000
+    volumes:
+      - firezone_data:/var/firezone 
+    networks:
+      firezone_net:
+        ipv4_address: 172.25.0.100
+    labels:
+      - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    image: postgres:15
+    container_name: fz_postgres
+    hostname: $POSTGRES_HOST_NAME
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    networks:
+      - firezone_net
+    labels:
+      - com.host.description=label
+    restart: always
+
+  firezone_backup:
+    image: jareware/docker-volume-backup:$DVB_VERSION
+    container_name: firezone_backup
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: firezone.tar.gz
+    volumes:
+      - firezone_data:/backup/firezone_data
+      - postgres_data:/backup/postgres_data
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
+    labels:
+      - "diun.enable=true"
+    restart: always
+    
