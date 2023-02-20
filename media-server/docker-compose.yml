@@ -67,7 +67,8 @@ services:
     restart: always
 
   transmission:
-    image: lscr.io/linuxserver/transmission:$TRANSMISSION_VERSION
+    #image: lscr.io/linuxserver/transmission:$TRANSMISSION_VERSION
+    image: lscr.io/linuxserver/transmission:3.00-r8-ls149
     container_name: transmission
     environment:
       - PUID=$USER_ID
