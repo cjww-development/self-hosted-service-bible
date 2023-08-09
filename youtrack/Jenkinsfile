@@ -1,0 +1,90 @@
+pipeline {
+	agent {
+		docker {
+			image 'docker:latest'
+			args '-v /var/run/docker.sock:/var/run/docker.sock'
+		}
+	}
+	options {
+		ansiColor('xterm')
+	}
+	environment {
+    SERVICE = "youtrack"
+    VERSION = "2023.1.17429"
+    YOUTRACK_HOST_NAME = credentials("youtrack-host-name")
+		DVB_VERSION = "2.6.0"
+		DOCKER_SOCKET = "/var/run/docker.sock"
+		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
+		AWS_ACCESS_KEY_ID = credentials("docker-volume-backup-aws-access-key")
+		AWS_SECRET_ACCESS_KEY = credentials("docker-volume-backup-aws-secret-key")
+	}
+  parameters {
+		booleanParam(
+			name: 'Deploy',
+			defaultValue: false,
+			description: 'Only deploy the service'
+		)
+		booleanParam(
+			name: 'Update',
+			defaultValue: false,
+			description: 'Only update and restart the service'
+		)
+		booleanParam(
+			name: 'Restart',
+			defaultValue: false,
+			description: 'Only restart the service'
+		)
+	}
+	stages {
+		stage("Pull Youtrack images") {
+			when {
+				expression {
+					params.Deploy || params.Update
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose pull
+          """
+				}
+			}
+		}
+		stage("Deploy Youtrack") {
+			when {
+				expression {
+					params.Deploy
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose up -d --remove-orphans
+          """
+				}
+			}
+		}
+		stage("Restart Youtrack") {
+			when {
+				expression {
+					params.Restart || params.Update
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose restart
+          """
+				}
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs()
+		}
+	}
+}

@@ -1,0 +1,52 @@
+version: '3.7'
+
+volumes:
+  youtrack_data:
+    name: youtrack_data
+  youtrack_conf:
+    name: youtrack_conf
+  youtrack_logs:
+    name: youtrack_logs
+  youtrack_backups:
+    name: youtrack_backups
+
+networks:
+  youtrack_net:
+    name: youtrack_net
+
+services:
+  youtrack:
+    image: jetbrains/youtrack:$VERSION
+    container_name: youtrack
+    hostname: $YOUTRACK_HOST_NAME
+    expose:
+      - 8080
+    volumes:
+      - youtrack_data:/opt/youtrack/data
+      - youtrack_conf:/opt/youtrack/conf
+      - youtrack_logs:/opt/youtrack/logs
+      - youtrack_backups:/opt/youtrack/backups
+    networks:
+      - youtrack_net
+    labels:
+      - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
+    restart: always
+
+  youtrack_backup:
+    image: jareware/docker-volume-backup:$DVB_VERSION
+    container_name: youtrack_backup
+    environment:
+      AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      BACKUP_FILENAME: youtrack.tar.gz
+    volumes:
+      - youtrack_data:/backup/youtrack_data
+      - youtrack_conf:/backup/youtrack_conf
+      - youtrack_logs:/backup/youtrack_logs
+      - $DOCKER_SOCKET:/var/run/docker.sock:ro
+    labels:
+      - "diun.enable=true"
+    restart: always
+    
