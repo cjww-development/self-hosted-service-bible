@@ -51,7 +51,7 @@ pipeline {
 		)
 	}
 	stages {
-		stage("Pull Pi-hole images") {
+		stage("Pull media server images") {
 			when {
 				expression {
 					params.Deploy || params.Update
@@ -66,10 +66,10 @@ pipeline {
 				}
 			}
 		}
-		stage("Deploy Pi-hole") {
+		stage("Deploy media server") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -81,10 +81,10 @@ pipeline {
 				}
 			}
 		}
-		stage("Restart Pi-hole") {
+		stage("Restart media server") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {
