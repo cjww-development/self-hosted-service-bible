@@ -70,7 +70,7 @@ pipeline {
 		stage("Deploy Firezone") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -85,7 +85,7 @@ pipeline {
 		stage("Restart Firezone") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {

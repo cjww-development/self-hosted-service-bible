@@ -67,7 +67,7 @@ pipeline {
 		stage("Deploy 2FAuth") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -82,7 +82,7 @@ pipeline {
 		stage("Restart 2FAuth") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {

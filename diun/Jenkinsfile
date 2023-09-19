@@ -10,7 +10,7 @@ pipeline {
 	}
 	environment {
     SERVICE = "diun"
-    VERSION = "4.22.0"
+    VERSION = "latest"
     TZ = "Europe/London"
     LOG_LEVEL = "info"
     LOG_JSON = true
@@ -60,7 +60,7 @@ pipeline {
 		stage("Deploy Diun") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -75,7 +75,7 @@ pipeline {
 		stage("Restart Diun") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {

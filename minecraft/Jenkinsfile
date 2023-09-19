@@ -80,7 +80,7 @@ pipeline {
 		stage("Deploy Minecraft") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -95,7 +95,7 @@ pipeline {
 		stage("Restart Minecraft") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {

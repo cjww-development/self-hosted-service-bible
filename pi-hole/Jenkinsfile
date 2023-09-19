@@ -10,7 +10,7 @@ pipeline {
 	}
 	environment {
     SERVICE = "pi-hole"
-    VERSION = "2022.10"
+    VERSION = "latest"
     PIHOLE_HOST_NAME = credentials("pihole-host-name")
     TZ = "Europe/London"
     WEBPASSWORD = credentials("pihole-web-password")

@@ -10,7 +10,7 @@ pipeline {
 	}
 	environment {
     SERVICE = "nginx-ssl"
-    NGINX_VERSION = "1.23.1-alpine"
+    NGINX_VERSION = "1.25.2"
     NGINX_CONF_REPO = credentials("nginx-config-repository")
     HTTP_INTERFACE_BIND = "0.0.0.0"
     CERTBOT_VERSION = "latest"
@@ -79,7 +79,7 @@ pipeline {
 		stage("Deploy Nginx stack") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -94,7 +94,7 @@ pipeline {
 		stage("Restart Nginx stack") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {

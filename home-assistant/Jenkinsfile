@@ -53,7 +53,7 @@ pipeline {
 		stage("Deploy Home Assistant") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -68,7 +68,7 @@ pipeline {
 		stage("Restart Home Assistant") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {

@@ -37,10 +37,10 @@ pipeline {
 		)
 	}
 	stages {
-		stage("Pull Portainer images") {
+		stage("Pull Uptime Kuma images") {
 			when {
 				expression {
-					params.Update
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -52,10 +52,10 @@ pipeline {
 				}
 			}
 		}
-		stage("Deploy Portainer") {
+		stage("Deploy Uptime Kuma") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -67,10 +67,10 @@ pipeline {
 				}
 			}
 		}
-		stage("Restart Portainer") {
+		stage("Restart Uptime Kuma") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {

@@ -39,7 +39,7 @@ pipeline {
 		stage("Deploy Jenkins") {
 			when {
 				expression {
-					params.Deploy
+					params.Deploy || params.Update
 				}
 			}
 			steps {
@@ -54,7 +54,7 @@ pipeline {
 		stage("Restart Jenkins") {
 			when {
 				expression {
-					params.Restart || params.Update
+					params.Restart
 				}
 			}
 			steps {
