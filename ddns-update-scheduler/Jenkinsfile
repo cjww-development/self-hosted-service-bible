@@ -35,21 +35,6 @@ pipeline {
 		)
 	}
 	stages {
-		stage("Pull DDNSUS images") {
-			when {
-				expression {
-					params.Deploy || params.Update
-				}
-			}
-			steps {
-				script {
-					sh """
-						cd $SERVICE
-						docker compose pull
-          """
-				}
-			}
-		}
 		stage("Deploy DDNSUS") {
 			when {
 				expression {
