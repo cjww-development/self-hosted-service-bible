@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: ddns-mongo.local
+    hostname: ddns-mongo.local
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+    networks:
+      - ddns-net
+
+  ddns-update-scheduler:
+    image: cjww-development/ddns-update-scheduler
+    container_name: ddns-update-scheduler.local
+    hostname: ddns-update-scheduler.local
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+    environment:
+      AWS_REGION: 'eu-west-2'
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      JOB_NAME: 'ddns-update'
+      JOB_FREQUENCY: "15 minutes"
+      MONGO_URL: 'mongodb://ddns-mongo.local/agenda'
+      SERVER_SETTINGS: '$SERVER_SETTINGS'
+      SMS_DESTINATION: $SMS_DESTINATION
+      SMS_ORIGINATOR: $SMS_ORIGINATOR
+      SMS_NOTIFICATIONS: 'true'
+      INITIAL_MESSAGE: 'The DDNS update service has just started. DDNS updates are in operation.'
+    networks:
+      - ddns-net
+    depends_on:
+      - mongo
+
+networks:
+  ddns-net:
+    name: ddns-net
