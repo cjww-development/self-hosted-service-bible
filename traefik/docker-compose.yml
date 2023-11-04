@@ -3,6 +3,10 @@ version: '3.7'
 networks:
   traefik_net:
     name: traefik_net
+
+  flame_net:
+    name: flame_net
+    external: true
   
 volumes:
   certbot_certs:
@@ -27,6 +31,7 @@ services:
       - certbot_certs:/etc/traefik/certs:ro
     networks:
       - traefik_net
+      - flame_net
     labels:
       - "diun.enable=true"
       - traefik.enable=true

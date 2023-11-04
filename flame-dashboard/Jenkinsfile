@@ -13,6 +13,7 @@ pipeline {
     VERSION = "latest"
     DASHBOARD_PASSWORD = credentials("flame-web-password")
     FLAME_HOST_NAME = credentials("flame-host-name")
+		FLAME_DOMAIN = credentials("flame-domain")
 		DVB_VERSION = "2.6.0"
 		DOCKER_SOCKET = "/var/run/docker.sock"
 		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
