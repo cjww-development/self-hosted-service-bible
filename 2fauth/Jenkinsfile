@@ -24,7 +24,7 @@ pipeline {
     CACHE_DRIVER = "file"
     SESSION_DRIVER = "file"
     AUTHENTICATION_GUARD = "web-guard"
-		TWOFAUTH_HOST_NAME = credentials("2fauth-host-name")
+		TWOFAUTH_DOMAIN = credentials("2fauth-domain")
 		DVB_VERSION = "2.6.0"
 		DOCKER_SOCKET = "/var/run/docker.sock"
 		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")

@@ -12,7 +12,6 @@ services:
   2fauth:
     image: 2fauth/2fauth:$VERSION
     container_name: 2fauth
-    hostname: $TWOFAUTH_HOST_NAME
     environment:
       - APP_NAME=$APP_NAME
       - APP_ENV=$APP_ENV
@@ -42,8 +41,6 @@ services:
       - MIX_PUSHER_APP_KEY=$PUSHER_APP_KEY
       - MIX_PUSHER_APP_CLUSTER=$PUSHER_APP_CLUSTER
       - MIX_ENV=local
-    expose:
-      - 8000
     volumes:
       - 2fauth_data:/2fauth
     networks:
@@ -51,6 +48,11 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "force=true"
+      - "traefik.http.routers.2fauth.rule=Host(`$TWOFAUTH_DOMAIN`)"
+      - "traefik.http.routers.2fauth.entrypoints=websecure"
+      - "traefik.http.routers.2fauth.tls=true"
     restart: always
 
   2fauth_backup:
