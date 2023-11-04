@@ -46,7 +46,6 @@ services:
       - net.ipv6.conf.all.forwarding=1
     ports:
       - 51820:51820/udp
-      - 13000:13000
     volumes:
       - firezone_data:/var/firezone 
     networks:
@@ -60,6 +59,12 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "force=true"
+      - "traefik.http.routers.firezone.rule=Host(`$FIREZONE_DOMAIN`)"
+      - "traefik.http.routers.firezone.entrypoints=websecure"
+      - "traefik.http.routers.firezone.tls=true"
+      - "traefik.http.services.firezone.loadbalancer.server.port=13000"
     depends_on:
       - postgres
     restart: always
@@ -70,16 +75,12 @@ services:
     hostname: $POSTGRES_HOST_NAME
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - 5433:5432
     environment:
       POSTGRES_DB: $POSTGRES_DB
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     networks:
       - firezone_net
-    labels:
-      - com.host.description=label
     restart: always
 
   firezone_backup:

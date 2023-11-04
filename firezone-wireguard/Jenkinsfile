@@ -11,8 +11,8 @@ pipeline {
 	environment {
     SERVICE = "firezone-wireguard"
     VERSION = "2.3.0"
-    
-		FIREZONE_HOST_NAME = credentials("firezone-host-name")
+	
+		FIREZONE_DOMAIN = credentials("firezone-domain")
 		VPN_HOST_NAME = credentials("vpn-host-name")
 		ADMIN_EMAIL = credentials("firezone-admin-email")
 		ADMIN_PASSWORD = credentials("firezone-admin-password")

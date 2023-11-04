@@ -10,6 +10,9 @@ networks:
   2fauth_net:
     name: 2fauth_net
     external: true
+  firezone_net:
+    name: firezone_net
+    external: true
   
 volumes:
   certbot_certs:
@@ -36,6 +39,7 @@ services:
       - traefik_net
       - flame_net
       - 2fauth_net
+      - firezone_net
     labels:
       - "diun.enable=true"
       - traefik.enable=true
