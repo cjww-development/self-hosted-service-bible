@@ -13,6 +13,9 @@ networks:
   firezone_net:
     name: firezone_net
     external: true
+  gitea_net:
+    name: gitea_net
+    external: true
   
 volumes:
   certbot_certs:
@@ -40,6 +43,7 @@ services:
       - flame_net
       - 2fauth_net
       - firezone_net
+      - gitea_net
     labels:
       - "diun.enable=true"
       - traefik.enable=true

@@ -11,7 +11,7 @@ pipeline {
 	environment {
     SERVICE = "gitea"
     VERSION = "latest"
-    GITEA_HOST_NAME = credentials("gitea-host-name")
+		GITEA_DOMAIN = credentials("gitea-domain")
 		GITEA_DB_USER = credentials("gitea-db-user")
 		GITEA_DB_PASSWORD = credentials("gitea-db-password")
 		GITEA_DB = credentials("gitea-db")

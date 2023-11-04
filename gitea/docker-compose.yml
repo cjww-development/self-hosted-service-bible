@@ -23,14 +23,21 @@ services:
       - GITEA__database__NAME=$GITEA_DB
       - GITEA__database__USER=$GITEA_DB_USER
       - GITEA__database__PASSWD=$GITEA_DB_PASSWORD
-    expose:
-      - 3000
-      - 22
     networks:
       - gitea_net
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.gitea.rule=Host(`$GITEA_DOMAIN`)"
+      - "traefik.http.routers.gitea.entrypoints=websecure"
+      - "traefik.http.routers.gitea.tls=true"
+
+      - "traefik.tcp.routers.gitea.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.gitea.entrypoints=ssh"
+
+      - "traefik.http.services.gitea.loadbalancer.server.port=3000"
+      - "traefik.tcp.services.gitea.loadbalancer.server.port=22"
     restart: always
     depends_on:
       - gitea_db
