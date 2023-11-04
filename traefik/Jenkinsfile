@@ -9,16 +9,10 @@ pipeline {
 		ansiColor('xterm')
 	}
 	environment {
-    SERVICE = "nginx-ssl"
-    NGINX_VERSION = "1.25.2"
-    NGINX_CONF_REPO = credentials("nginx-config-repository")
+    SERVICE = "traefik"
     HTTP_INTERFACE_BIND = "0.0.0.0"
-    CERTBOT_VERSION = "latest"
-		DVB_VERSION = "2.6.0"
 		DOCKER_SOCKET = "/var/run/docker.sock"
-		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
-		AWS_ACCESS_KEY_ID = credentials("docker-volume-backup-aws-access-key")
-		AWS_SECRET_ACCESS_KEY = credentials("docker-volume-backup-aws-secret-key")
+		TRAEFIK_DOMAIN = credentials("traefik-domain")
 	}
   parameters {
 		booleanParam(
@@ -43,7 +37,7 @@ pipeline {
 		)
 	}
 	stages {
-		stage("Pull Nginx images") {
+		stage("Pull Traefik images") {
 			when {
 				expression {
 					params.Deploy || params.Update
@@ -61,27 +55,18 @@ pipeline {
 		stage("Deploy updated configuration") {
 			steps {
 				script {
-          sshagent (credentials: ['cjww-dev-web-operations']) {
-						sh """
-              [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
-              ssh-keyscan -t rsa,dsa github.com >> ~/.ssh/known_hosts
-              cd $SERVICE
-              apk update
-              apk add git
-              
-							git clone $NGINX_CONF_REPO nginx-conf
-
-							rm -rf /docker-container-config/nginx/* || true
-							mkdir -p /docker-container-config/nginx
-							
-              cp nginx-conf/nginx.conf /docker-container-config/nginx/nginx.conf
-              cp -rf nginx-conf/servers /docker-container-config/nginx/servers
-						"""
-					}
+          sh """
+						cd $SERVICE
+						rm -rf /docker-container-config/traefik/* || true
+						mkdir -p /docker-container-config/traefik
+						
+						cp traefik.yml /docker-container-config/traefik/traefik.yml
+						cp tls-certs.toml /docker-container-config/traefik/tls-certs.toml
+					"""
 				}
 			}
 		}
-		stage("Deploy Nginx stack") {
+		stage("Deploy Traefik stack") {
 			when {
 				expression {
 					params.Deploy || params.Update
@@ -96,7 +81,7 @@ pipeline {
 				}
 			}
 		}
-		stage("Restart Nginx stack") {
+		stage("Restart Traefik stack") {
 			when {
 				expression {
 					params.Restart
@@ -111,7 +96,7 @@ pipeline {
 				}
 			}
 		}
-		stage("Destroy Nginx stack") {
+		stage("Destroy Traefik stack") {
 			when {
 				expression {
 					params.Destroy

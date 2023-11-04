@@ -1,0 +1,57 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false  # true by default
+
+# Log information
+# ---
+log:
+  level: DEBUG  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: common  # common, json, logfmt
+  # filePath: /var/log/traefik/traefik.log
+
+# Accesslog
+# ---
+accesslog:
+  format: common  # common, json, logfmt
+  # filePath: /var/log/traefik/access.log
+
+# Entry Points configuration
+# ---
+entryPoints:
+  web:
+    address: :80
+  websecure:
+    address: :443
+    http:
+      tls: true
+  ssh:
+    address: :22
+
+# Providers configuration
+# ---
+providers:
+  docker:
+    exposedbydefault: false
+    watch: true
+  file:
+    filename: /etc/traefik/tls-certs.toml
+    watch: true
+
+# API configuration
+# ---
+api:
+  dashboard: true
+  insecure: true
+
+# Overwrite Default Certificates
+# ---
+tls:
+  # certificates:
+  #   - certFile: /etc/traefik/certs/live/cjww.dev/fullchain.pem
+  #     keyFile: /etc/traefik/certs/live/cjww.dev/privkey.pem
+
+ stores:
+   default:
+     defaultCertificate:
+       certFile: /etc/traefik/certs/live/cjww.dev/fullchain.pem
+       keyFile: /etc/traefik/certs/live/cjww.dev/privkey.pem

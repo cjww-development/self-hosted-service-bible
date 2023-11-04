@@ -1,0 +1,54 @@
+version: '3.7'
+
+networks:
+  traefik_net:
+    name: traefik_net
+  
+volumes:
+  certbot_certs:
+    name: certbot_certs
+    external: true
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    command:
+      - "--configFile=/etc/traefik/dynamic/traefik.yml"
+    ports:
+      - 5678:80
+      - 5677:443
+      - 5676:22
+      - 5675:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /docker-container-config/traefik/traefik.yml:/etc/traefik/dynamic/traefik.yml:ro
+      - /docker-container-config/traefik/tls-certs.toml:/etc/traefik/tls-certs.toml:ro
+      - certbot_certs:/etc/traefik/certs:ro
+    networks:
+      - traefik_net
+    labels:
+      - "diun.enable=true"
+      - traefik.enable=true
+      - "traefik.http.routers.dash.rule=Host(`$TRAEFIK_DOMAIN`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.dash.service=api@internal"
+      - "traefik.http.routers.dash.entrypoints=websecure"
+      - "traefik.http.routers.dash.tls=true"
+      - "traefik.http.routers.dash.tls.domains[0].main=*.cjww.dev"
+      - "traefik.http.routers.dash.tls.domains[0].sans=$TRAEFIK_DOMAIN"
+    restart: always
+
+  # traefik_backup:
+  #   image: jareware/docker-volume-backup:$DVB_VERSION
+  #   container_name: traefik_backup
+  #   environment:
+  #     AWS_S3_BUCKET_NAME: $AWS_S3_BUCKET_NAME
+  #     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+  #     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  #     BACKUP_FILENAME: traefik.tar.gz
+  #   volumes:
+  #     - certbot_certs:/backup/certbot_certs
+  #     - $DOCKER_SOCKET:/var/run/docker.sock:ro
+  #   labels:
+  #     - "diun.enable=true"
+  #   restart: always
