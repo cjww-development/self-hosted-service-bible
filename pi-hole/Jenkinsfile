@@ -11,7 +11,7 @@ pipeline {
 	environment {
     SERVICE = "pi-hole"
     VERSION = "latest"
-    PIHOLE_HOST_NAME = credentials("pihole-host-name")
+    PIHOLE_DOMAIN = credentials("pihole-domain")
     TZ = "Europe/London"
     WEBPASSWORD = credentials("pihole-web-password")
     FTLCONF_LOCAL_IPV4 = "0.0.0.0"

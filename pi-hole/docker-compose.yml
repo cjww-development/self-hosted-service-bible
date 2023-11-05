@@ -19,7 +19,6 @@ services:
   pihole:
     image: pihole/pihole:$VERSION
     container_name: pihole
-    hostname: $PIHOLE_HOST_NAME
     environment:
       - TZ=$TZ
       - WEBPASSWORD=$WEBPASSWORD
@@ -29,9 +28,9 @@ services:
       - VIRTUAL_HOST=$VIRTUAL_HOST
       - TEMPERATUREUNIT=$TEMPERATUREUNIT
       - DNSMASQ_LISTENING=$DNSMASQ_LISTENING
-    expose:
-      - 80
-      - 443
+    # expose:
+    #   - 80
+    #   - 443
     ports: 
       - $DNS_INTERFACE_BIND:$DNS_PORT:53/tcp
       - $DNS_INTERFACE_BIND:$DNS_PORT:53/udp
@@ -44,6 +43,11 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.pihole.rule=Host(`$PIHOLE_DOMAIN`)"
+      - "traefik.http.routers.pihole.entrypoints=websecure"
+      - "traefik.http.routers.pihole.tls=true"
+      - "traefik.http.services.pihole.loadbalancer.server.port=80"
     restart: always
 
   pihole_backup:

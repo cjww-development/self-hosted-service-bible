@@ -12,11 +12,8 @@ services:
   portainer:
     image: portainer/portainer-ce:$VERSION
     container_name: portainer
-    hostname: $PORTAINER_HOST_NAME
     security_opt:
       - no-new-privileges:true
-    expose:
-      - 9000
     volumes:
       - portainer_data:/data
       - $DOCKER_SOCKET:/var/run/docker.sock
@@ -26,6 +23,11 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`$PORTAINER_DOMAIN`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
     restart: always
 
   portainer_backup:
