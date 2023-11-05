@@ -211,7 +211,7 @@ services:
       - "traefik.http.routers.plex.rule=Host(`$PLEX_DOMAIN`)"
       - "traefik.http.routers.plex.entrypoints=websecure"
       - "traefik.http.routers.plex.tls=true"
-      - "traefik.http.services.plex.loadbalancer.server.port=32400"
+      - "traefik.http.services.plex.loadbalancer.server.url=http://$HOST_IP:32400"
     restart: always
 
   pihole_backup:

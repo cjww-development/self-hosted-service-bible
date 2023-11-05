@@ -37,6 +37,7 @@ pipeline {
 		SONARR_DOMAIN = credentials("sonarr-domain")
 		RADARR_DOMAIN = credentials("radarr-domain")
 		PLEX_DOMAIN = credentials("plex-domain")
+		HOST_IP = credentials("host-ip")
 	}
   parameters {
 		booleanParam(

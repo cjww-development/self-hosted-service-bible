@@ -44,12 +44,8 @@ api:
 # Overwrite Default Certificates
 # ---
 tls:
-  # certificates:
-  #   - certFile: /etc/traefik/certs/live/cjww.dev/fullchain.pem
-  #     keyFile: /etc/traefik/certs/live/cjww.dev/privkey.pem
-
- stores:
-   default:
-     defaultCertificate:
-       certFile: /etc/traefik/certs/live/cjww.dev/fullchain.pem
-       keyFile: /etc/traefik/certs/live/cjww.dev/privkey.pem
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/traefik/certs/live/cjww.dev/fullchain.pem
+        keyFile: /etc/traefik/certs/live/cjww.dev/privkey.pem
