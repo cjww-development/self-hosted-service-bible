@@ -4,23 +4,41 @@ networks:
   traefik_net:
     name: traefik_net
 
-  flame_net:
-    name: flame_net
-    external: true
   2fauth_net:
     name: 2fauth_net
     external: true
   firezone_net:
     name: firezone_net
     external: true
+  flame_net:
+    name: flame_net
+    external: true
   gitea_net:
     name: gitea_net
+    external: true
+  monitoring_net:
+    name: monitoring_net
+    external: true
+  jenkins_net:
+    name: jenkins_net
+    external: true
+  media_server_net:
+    name: media_server_net
+    external: true
+  pi_hole_net:
+    name: pi_hole_net
+    external: true
+  portainer_net:
+    name: portainer_net
+    external: true
+  uptime_kuma_net:
+    name: uptime_kuma_net
     external: true
   vaultwarden_net:
     name: vaultwarden_net
     external: true
-  uptime_kuma_net:
-    name: uptime_kuma_net
+  youtrack_net:
+    name: youtrack_net
     external: true
   
 volumes:
@@ -46,15 +64,21 @@ services:
       - certbot_certs:/etc/traefik/certs:ro
     networks:
       - traefik_net
-      - flame_net
       - 2fauth_net
       - firezone_net
+      - flame_net
       - gitea_net
-      - vaultwarden_net
+      - monitoring_net
+      - jenkins_net
+      - media_server_net
+      - pi_hole_net
+      - portainer_net
       - uptime_kuma_net
+      - vaultwarden_net
+      - youtrack_net
     labels:
       - "diun.enable=true"
-      - traefik.enable=true
+      - "traefik.enable=true"
       - "traefik.http.routers.dash.rule=Host(`$TRAEFIK_DOMAIN`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       - "traefik.http.routers.dash.service=api@internal"
       - "traefik.http.routers.dash.entrypoints=websecure"
