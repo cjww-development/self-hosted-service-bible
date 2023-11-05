@@ -12,10 +12,6 @@ services:
   vaultwarden:
     image: vaultwarden/server:$VERSION
     container_name: vaultwarden
-    hostname: $VAULTWARDEN_HOST_NAME
-    expose:
-      - 80
-      - 3012
     volumes:
       - vaultwarden_data:/data/
     networks:
@@ -23,6 +19,11 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.vaultwarden.rule=Host(`$VAULTWARDEN_DOMAIN`)"
+      - "traefik.http.routers.vaultwarden.entrypoints=websecure"
+      - "traefik.http.routers.vaultwarden.tls=true"
+      - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
     restart: always
 
   vaultwarden_backup:

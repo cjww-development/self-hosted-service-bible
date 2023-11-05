@@ -16,6 +16,9 @@ networks:
   gitea_net:
     name: gitea_net
     external: true
+  vaultwarden_net:
+    name: vaultwarden_net
+    external: true
   
 volumes:
   certbot_certs:
@@ -44,6 +47,7 @@ services:
       - 2fauth_net
       - firezone_net
       - gitea_net
+      - vaultwarden_net
     labels:
       - "diun.enable=true"
       - traefik.enable=true
