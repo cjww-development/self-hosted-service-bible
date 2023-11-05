@@ -18,8 +18,6 @@ accesslog:
 # Entry Points configuration
 # ---
 entryPoints:
-  web:
-    address: :80
   websecure:
     address: :443
     http:
@@ -41,7 +39,7 @@ providers:
 # ---
 api:
   dashboard: true
-  insecure: true
+  insecure: false
 
 # Overwrite Default Certificates
 # ---
