@@ -19,6 +19,9 @@ networks:
   vaultwarden_net:
     name: vaultwarden_net
     external: true
+  uptime_kuma_net:
+    name: uptime_kuma_net
+    external: true
   
 volumes:
   certbot_certs:
@@ -48,6 +51,7 @@ services:
       - firezone_net
       - gitea_net
       - vaultwarden_net
+      - uptime_kuma_net
     labels:
       - "diun.enable=true"
       - traefik.enable=true

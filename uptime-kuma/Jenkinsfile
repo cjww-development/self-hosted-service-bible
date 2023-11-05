@@ -11,10 +11,9 @@ pipeline {
 	environment {
 		SERVICE = "uptime-kuma"
 		VERSION = "alpine"
-    UPTIME_KUMA_HOST_NAME = credentials("uptime-kuma-host-name")
+    UPTIME_KUMA_DOMAIN = credentials("uptime-kuma-domain")
 		DVB_VERSION = "2.6.0"
 		DOCKER_SOCKET = "/var/run/docker.sock"
-		PORTAINER_HOST_NAME = credentials("portainer-host-name")
 		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
 		AWS_ACCESS_KEY_ID = credentials("docker-volume-backup-aws-access-key")
 		AWS_SECRET_ACCESS_KEY = credentials("docker-volume-backup-aws-secret-key")

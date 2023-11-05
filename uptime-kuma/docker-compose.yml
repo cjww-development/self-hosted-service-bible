@@ -15,9 +15,6 @@ services:
   uptime_kuma:
     image: louislam/uptime-kuma:$VERSION
     container_name: uptime_kuma
-    hostname: $UPTIME_KUMA_HOST_NAME
-    expose:
-      - 3001
     volumes:
       - uptime_kuma_data:/app/data
       - $DOCKER_SOCKET:/var/run/docker.sock:ro
@@ -31,6 +28,10 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.uk.rule=Host(`$UPTIME_KUMA_DOMAIN`)"
+      - "traefik.http.routers.uk.entrypoints=websecure"
+      - "traefik.http.routers.uk.tls=true"
     restart: always
 
   uptime_kuma_backup:
