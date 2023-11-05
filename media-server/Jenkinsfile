@@ -32,6 +32,11 @@ pipeline {
 		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
 		AWS_ACCESS_KEY_ID = credentials("docker-volume-backup-aws-access-key")
 		AWS_SECRET_ACCESS_KEY = credentials("docker-volume-backup-aws-secret-key")
+		TRANSMISSION_DOMAIN = credentials("transmission-domain")
+		PROWLARR_DOMAIN = credentials("prowlarr-domain")
+		SONARR_DOMAIN = credentials("sonarr-domain")
+		RADARR_DOMAIN = credentials("radarr-domain")
+		PLEX_DOMAIN = credentials("plex-domain")
 	}
   parameters {
 		booleanParam(
