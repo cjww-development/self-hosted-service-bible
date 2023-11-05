@@ -35,6 +35,16 @@ pipeline {
 			defaultValue: false,
 			description: 'Destroy the service'
 		)
+		booleanParam(
+			name: 'Shutdown',
+			defaultValue: false,
+			description: 'Shutdown the service'
+		)
+		booleanParam(
+			name: 'Nuke',
+			defaultValue: false,
+			description: 'Destroy containers, networks and volumes'
+		)
 	}
 	stages {
 		stage("Pull Traefik images") {
@@ -96,10 +106,10 @@ pipeline {
 				}
 			}
 		}
-		stage("Destroy Traefik stack") {
+		stage("Shutdown Traefik stack") {
 			when {
 				expression {
-					params.Destroy
+					params.Shutdown
 				}
 			}
 			steps {
@@ -107,6 +117,21 @@ pipeline {
 					sh """
 						cd $SERVICE
 						docker compose down
+          """
+				}
+			}
+		}
+		stage("Nuke Traefik stack") {
+			when {
+				expression {
+					params.Nuke
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose down -v
           """
 				}
 			}

@@ -50,6 +50,16 @@ pipeline {
 			defaultValue: false,
 			description: 'Only restart the service'
 		)
+		booleanParam(
+			name: 'Shutdown',
+			defaultValue: false,
+			description: 'Shutdown the service'
+		)
+		booleanParam(
+			name: 'Nuke',
+			defaultValue: false,
+			description: 'Destroy containers, networks and volumes'
+		)
 	}
 	stages {
 		stage("Pull Grafana stack images") {
@@ -109,6 +119,36 @@ pipeline {
 					sh """
 						cd $SERVICE
 						docker compose restart
+          """
+				}
+			}
+		}
+		stage("Shutdown Grafana stack") {
+			when {
+				expression {
+					params.Shutdown
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose down
+          """
+				}
+			}
+		}
+		stage("Nuke Grafana stack") {
+			when {
+				expression {
+					params.Nuke
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose down -v
           """
 				}
 			}

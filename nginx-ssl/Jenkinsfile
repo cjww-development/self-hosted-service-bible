@@ -37,9 +37,14 @@ pipeline {
 			description: 'Only restart the service'
 		)
 		booleanParam(
-			name: 'Destroy',
+			name: 'Shutdown',
 			defaultValue: false,
-			description: 'Destroy the service'
+			description: 'Shutdown the service'
+		)
+		booleanParam(
+			name: 'Nuke',
+			defaultValue: false,
+			description: 'Destroy containers, networks and volumes'
 		)
 	}
 	stages {
@@ -111,10 +116,10 @@ pipeline {
 				}
 			}
 		}
-		stage("Destroy Nginx stack") {
+		stage("Shutdown Nginx stack") {
 			when {
 				expression {
-					params.Destroy
+					params.Shutdown
 				}
 			}
 			steps {
@@ -122,6 +127,21 @@ pipeline {
 					sh """
 						cd $SERVICE
 						docker compose down
+          """
+				}
+			}
+		}
+		stage("Nuke Nginx stack") {
+			when {
+				expression {
+					params.Nuke
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose down -v
           """
 				}
 			}

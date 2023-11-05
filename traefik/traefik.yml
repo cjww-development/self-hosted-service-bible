@@ -41,7 +41,7 @@ providers:
 # ---
 api:
   dashboard: true
-  insecure: true
+  insecure: false
 
 # Overwrite Default Certificates
 # ---

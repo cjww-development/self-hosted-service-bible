@@ -34,6 +34,16 @@ pipeline {
 			defaultValue: false,
 			description: 'Only restart the service'
 		)
+		booleanParam(
+			name: 'Shutdown',
+			defaultValue: false,
+			description: 'Shutdown the service'
+		)
+		booleanParam(
+			name: 'Nuke',
+			defaultValue: false,
+			description: 'Destroy containers, networks and volumes'
+		)
 	}
 	stages {
 		stage("Deploy Jenkins") {
@@ -62,6 +72,36 @@ pipeline {
 					sh """
 						cd $SERVICE
 						docker compose restart
+          """
+				}
+			}
+		}
+		stage("Shutdown Jenkins stack") {
+			when {
+				expression {
+					params.Shutdown
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose down
+          """
+				}
+			}
+		}
+		stage("Nuke Jenkins stack") {
+			when {
+				expression {
+					params.Nuke
+				}
+			}
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						docker compose down -v
           """
 				}
 			}
