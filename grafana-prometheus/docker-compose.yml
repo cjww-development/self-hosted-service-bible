@@ -23,8 +23,6 @@ services:
       - GF_SECURITY_ADMIN_USER=$GRAFANA_ADMIN_USER
       - GF_SECURITY_ADMIN_PASSWORD=$GRAFANA_ADMIN_PASSWORD
       - GF_USERS_ALLOW_SIGN_UP=false
-    expose:
-      - 3000
     networks:
       - monitoring_net
     volumes:
@@ -32,6 +30,11 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`$GRAFANA_DOMAIN`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls=true"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     restart: always
 
   node_exporter:
@@ -43,8 +46,6 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-    expose:
-      - 9100
     volumes:
       - $PROC_PATH:/host/proc:ro
       - $SYS_PATH:/host/sys:ro
@@ -54,6 +55,11 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.nodeexporter.rule=Host(`$NODE_EXPORTER_DOMAIN`)"
+      - "traefik.http.routers.nodeexporter.entrypoints=websecure"
+      - "traefik.http.routers.nodeexporter.tls=true"
+      - "traefik.http.services.nodeexporter.loadbalancer.server.port=9100"
     restart: always
 
   prometheus:
@@ -67,8 +73,6 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=${RETENTION_TIME}'
       - '--web.enable-lifecycle'
-    expose:
-      - 9090
     volumes:
       - prometheus_conf:/etc/prometheus
       - prometheus_data:/prometheus
@@ -78,6 +82,11 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`$PROMETHEUS_DOMAIN`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls=true"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
     restart: always
 
   alertmanager:
@@ -87,13 +96,16 @@ services:
     # command:
     #   - '--config.file=/etc/alertmanager/config.yml'
     #   - '--storage.path=/alertmanager'
-    expose:
-      - 9093
     networks:
       - monitoring_net
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.alertmanager.rule=Host(`$ALERT_MANAGER_DOMAIN`)"
+      - "traefik.http.routers.alertmanager.entrypoints=websecure"
+      - "traefik.http.routers.alertmanager.tls=true"
+      - "traefik.http.services.alertmanager.loadbalancer.server.port=9093"
     restart: always
 
   grafana_prometheus_backup:
