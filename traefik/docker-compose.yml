@@ -53,8 +53,10 @@ services:
     command:
       - "--configFile=/etc/traefik/dynamic/traefik.yml"
     ports:
-      - $HTTP_INTERFACE_BIND:443:443
-      - $HTTP_INTERFACE_BIND:22:22
+      - 5678:80
+      - 5677:443
+      - 5676:22
+      - 5675:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /docker-container-config/traefik/traefik.yml:/etc/traefik/dynamic/traefik.yml:ro
