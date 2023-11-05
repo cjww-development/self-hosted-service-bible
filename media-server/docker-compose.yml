@@ -184,8 +184,8 @@ services:
     image: lscr.io/linuxserver/plex:$PLEX_VERSION
     container_name: plex
     # hostname: $PLEX_HOST_NAME
-    ports:
-      - 32400:32400
+    # ports:
+      # - 32400:32400
     #   - $INTERFACE_BIND:3005:3005/tcp
     #   - $INTERFACE_BIND:8324:8324/tcp
     #   - $INTERFACE_BIND:32469:32469/tcp
@@ -202,9 +202,9 @@ services:
     volumes:
       - $MEDIA_PATH/tv:/plex-media/tv
       - $MEDIA_PATH/movies:/plex-media/movies
-    networks:
-      - media_server_net
-    # network_mode: host
+    # networks:
+    #   - media_server_net
+    network_mode: host
     labels:
       - "diun.enable=true"
       - "traefik.enable=true"
