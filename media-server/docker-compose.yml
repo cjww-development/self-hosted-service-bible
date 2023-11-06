@@ -183,17 +183,18 @@ services:
   plex-media-server:
     image: lscr.io/linuxserver/plex:$PLEX_VERSION
     container_name: plex
-    # hostname: $PLEX_HOST_NAME
-    # ports:
-      # - 32400:32400
-    #   - $INTERFACE_BIND:3005:3005/tcp
-    #   - $INTERFACE_BIND:8324:8324/tcp
-    #   - $INTERFACE_BIND:32469:32469/tcp
-    #   - $INTERFACE_BIND:1900:1900/udp
-    #   - $INTERFACE_BIND:32410:32410/udp
-    #   - $INTERFACE_BIND:32412:32412/udp
-    #   - $INTERFACE_BIND:32413:32413/udp
-    #   - $INTERFACE_BIND:32414:32414/udp
+    hostname: $PLEX_HOST_NAME
+    ports:
+      - 1900:1900/udp
+      - 3005:3005/tcp
+      - 5353:5353/udp
+      - 8324:8324/udp
+      - 32400:32400/tcp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+      - 32469:32469/tcp
     environment:
       - PUID=$USER_ID
       - PGID=$GROUP_ID
@@ -202,9 +203,9 @@ services:
     volumes:
       - $MEDIA_PATH/tv:/plex-media/tv
       - $MEDIA_PATH/movies:/plex-media/movies
-    # networks:
-    #   - media_server_net
-    network_mode: host
+    networks:
+      - media_server_net
+    # network_mode: host
     labels:
       - "diun.enable=true"
       - "traefik.enable=true"
