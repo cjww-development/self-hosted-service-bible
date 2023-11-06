@@ -200,6 +200,7 @@ services:
       - PGID=$GROUP_ID
       - VERSION=docker
       - name=$PLEX_CLAIM
+      - ADVERTISE_IP=http://$HOST_IP:32400,https://$PLEX_DOMAIN:443
     volumes:
       - $MEDIA_PATH/tv:/plex-media/tv
       - $MEDIA_PATH/movies:/plex-media/movies
