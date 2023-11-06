@@ -68,10 +68,10 @@ pipeline {
           sh """
 						cd $SERVICE
 						rm -rf /docker-container-config/traefik/* || true
-						mkdir -p /docker-container-config/traefik
+						mkdir -p /docker-container-config/traefik/dynamic
 						
 						cp traefik.yml /docker-container-config/traefik/traefik.yml
-						cp tls-certs.toml /docker-container-config/traefik/tls-certs.toml
+						cp tls-certs.toml /docker-container-config/traefik/dynamic/tls-certs.toml
 					"""
 				}
 			}
