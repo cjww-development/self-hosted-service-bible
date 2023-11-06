@@ -32,7 +32,7 @@ providers:
     exposedbydefault: false
     watch: true
   file:
-    filename: /etc/traefik/tls-certs.toml
+    directory: /etc/traefik
     watch: true
 
 # API configuration
