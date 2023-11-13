@@ -2,7 +2,7 @@ pipeline {
 	agent {
 		docker {
 			image 'docker:latest'
-			args '-v /var/run/docker.sock:/var/run/docker.sock'
+			args '-v /var/run/docker.sock:/var/run/docker.sock -v /docker-container-config:/docker-container-config'
 		}
 	}
 	options {
@@ -56,6 +56,18 @@ pipeline {
 					sh """
 						cd $SERVICE
 						docker compose pull
+          """
+				}
+			}
+		}
+		stage("Deploy updated configuration") {
+			steps {
+				script {
+					sh """
+						cd $SERVICE
+						rm -rf /docker-container-config/home-assistant
+            mkdir -p /docker-container-config/home-assistant
+						cp configuration.yaml /docker-container-config/home-assistant/configuration.yaml
           """
 				}
 			}

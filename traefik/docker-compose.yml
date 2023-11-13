@@ -60,6 +60,8 @@ services:
       - /docker-container-config/traefik/traefik.yml:/etc/traefik/dynamic/traefik.yml:ro
       - /docker-container-config/traefik/dynamic:/etc/traefik
       - certbot_certs:/etc/traefik/certs:ro
+    extra_hosts:
+      - host.docker.internal:172.17.0.1
     networks:
       - traefik_net
       - 2fauth_net

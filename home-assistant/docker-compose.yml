@@ -11,6 +11,7 @@ services:
     hostname: $HOME_ASSISTANT_HOST_NAME
     volumes:
       - home_assistant_data:/config
+      - /docker-container-config/home-assistant/configuration.yaml:/config/configuration.yaml:ro
       - /etc/localtime:/etc/localtime:ro
     privileged: true
     network_mode: host
