@@ -19,8 +19,11 @@ homeassistant:
   name: "9 OC"
   unit_system: metric
   currency: GBP
-  internal_url: "https://home-assistant.cjww.dev"
-  external_url: "https://home-assistant.cjww.dev"
+  internal_url: "DOMAIN"
+  external_url: "DOMAIN"
+
+notify_events:
+  token: NOTIFY_TOKEN
 
 automation: !include automations.yaml
 script: !include scripts.yaml
