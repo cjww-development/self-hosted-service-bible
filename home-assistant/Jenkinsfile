@@ -14,7 +14,6 @@ pipeline {
 		DVB_VERSION = "2.6.0"
 		DOCKER_SOCKET = "/var/run/docker.sock"
 		HA_DOMAIN = credentials("home-assistant-domain")
-		NOTIFY_TOKEN = credentials("notify-token")
 		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
 		AWS_ACCESS_KEY_ID = credentials("docker-volume-backup-aws-access-key")
 		AWS_SECRET_ACCESS_KEY = credentials("docker-volume-backup-aws-secret-key")
@@ -70,7 +69,6 @@ pipeline {
 						rm -rf /docker-container-config/home-assistant
             mkdir -p /docker-container-config/home-assistant
 						sed -i -e "s/DOMAIN/$HA_DOMAIN/g" configuration.yaml
-						sed -i -e "s/NOTIFY_TOKEN/$NOTIFY_TOKEN/g" configuration.yaml
 						cp configuration.yaml /docker-container-config/home-assistant/configuration.yaml
           """
 				}
