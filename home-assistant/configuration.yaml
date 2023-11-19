@@ -22,13 +22,13 @@ homeassistant:
   internal_url: "DOMAIN"
   external_url: "DOMAIN"
 
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
 notify_events:
   token: NOTIFY_TOKEN
 
 notify:
   - name: test
     platform: notify_events
-
-automation: !include automations.yaml
-script: !include scripts.yaml
-scene: !include scenes.yaml
