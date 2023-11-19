@@ -27,7 +27,7 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 
 notify_events:
-  token: NOTIFY_TOKEN
+  token: "NOTIFY_TOKEN"
 
 notify:
   - name: test
