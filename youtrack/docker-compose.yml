@@ -35,7 +35,7 @@ services:
       - "traefik.http.routers.youtrack.rule=Host(`$YOUTRACK_DOMAIN`)"
       - "traefik.http.routers.youtrack.entrypoints=websecure"
       - "traefik.http.routers.youtrack.tls=true"
-      - "traefik.http.services.youtrack.loadbalancer.server.port=80"
+      - "traefik.http.services.youtrack.loadbalancer.server.port=8080"
     restart: always
 
   youtrack_backup:
