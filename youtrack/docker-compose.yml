@@ -18,10 +18,10 @@ services:
   youtrack:
     image: jetbrains/youtrack:$VERSION
     container_name: youtrack
-    hostname: $YOUTRACK_HOST_NAME
     expose:
       - 8080
     volumes:
+      - /dev/urandom:/dev/urandom
       - youtrack_data:/opt/youtrack/data
       - youtrack_conf:/opt/youtrack/conf
       - youtrack_logs:/opt/youtrack/logs
@@ -31,6 +31,11 @@ services:
     labels:
       - "diun.enable=true"
       - "docker-volume-backup.stop-during-backup=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.vaultwarden.rule=Host(`$YOUTRACK_DOMAIN`)"
+      - "traefik.http.routers.vaultwarden.entrypoints=websecure"
+      - "traefik.http.routers.vaultwarden.tls=true"
+      - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
     restart: always
 
   youtrack_backup:

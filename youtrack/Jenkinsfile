@@ -11,7 +11,7 @@ pipeline {
 	environment {
     SERVICE = "youtrack"
     VERSION = "2023.1.17429"
-    YOUTRACK_HOST_NAME = credentials("youtrack-host-name")
+    YOUTRACK_DOMAIN = credentials("youtrack-domain")
 		DVB_VERSION = "2.6.0"
 		DOCKER_SOCKET = "/var/run/docker.sock"
 		AWS_S3_BUCKET_NAME = credentials("docker-volume-backup-bucket")
