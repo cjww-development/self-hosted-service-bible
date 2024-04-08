@@ -11,6 +11,8 @@ volumes:
     name: bazarr
   transmission:
     name: transmission
+  overseerr:
+    name: overseerr
 
 networks:
   media_server_net:
@@ -41,6 +43,7 @@ services:
       - 9696
       - 9091
       - 51413
+      - 5055
     # ports:
     #   # QBT UI Port
     #   - $INTERFACE_BIND:8090:8090
@@ -88,6 +91,11 @@ services:
       - "traefik.http.routers.radarr.tls=true"
       - "traefik.http.routers.radarr.service=radarr"
       - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+      - "traefik.http.routers.overseerr.rule=Host(`$OVERSEERR_DOMAIN`)"
+      - "traefik.http.routers.overseerr.entrypoints=websecure"
+      - "traefik.http.routers.overseerr.tls=true"
+      - "traefik.http.routers.overseerr.service=overseerr"
+      - "traefik.http.services.overseerr.loadbalancer.server.port=5055"
     restart: always
 
   transmission:
@@ -174,6 +182,22 @@ services:
       - bazarr:/config
       - $MEDIA_PATH/movies:/movies
       - $MEDIA_PATH/tv:/tv
+    # Route egress traffic through VPN container
+    network_mode: service:expressvpn
+    labels:
+      - "diun.enable=true"
+      - "docker-volume-backup.stop-during-backup=true"
+    restart: always
+
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - LOG_LEVEL=info
+      - TZ=$TZ
+    volumes:
+      - overseerr:/app/config
+    # Route egress traffic through VPN container
     network_mode: service:expressvpn
     labels:
       - "diun.enable=true"
