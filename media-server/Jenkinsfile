@@ -11,7 +11,7 @@ pipeline {
 	environment {
     SERVICE = "media-server"
 
-    EXPRESS_VPN_VERSION = "latest"
+    EXPRESS_VPN_VERSION = "3.57.0.3-1.653ac494"
     EXPRESS_VPN_HOST_NAME = credentials("express-vpn-host-name")
     EXPRESS_VPN_ACTIVATION_CODE = credentials("express-vpn-activation-code")
     TRANSMISSION_VERSION = "latest"
