@@ -17,6 +17,9 @@ volumes:
 networks:
   media_server_net:
     name: media_server_net
+  pi_hole_net:
+    external: true
+    name: pi_hole_net
 
 services:
   expressvpn:
@@ -68,6 +71,9 @@ services:
     command: /bin/bash
     networks:
       - media_server_net
+      - pi_hole_net
+    dns:
+      - 10.5.0.5
     labels:
       - "diun.enable=true"
       - "traefik.enable=true"
