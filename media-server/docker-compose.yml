@@ -225,6 +225,7 @@ services:
       - $MEDIA_PATH/movies:/plex-media/movies
       - $MEDIA_PATH/photos:/plex-media/photos
     network_mode: host
+    privileged: true
     labels:
       - "diun.enable=true"
     restart: always
